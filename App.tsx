@@ -54,11 +54,11 @@ export default function App() {
             >
               App.js
             </Box>
-            <Text>and save to reload.</Text>
+            <Text>and tooo!</Text>
           </HStack>
           <Link href="https://docs.nativebase.io" isExternal>
             <Text color="primary.500" underline fontSize={"xl"}>
-              Learn NativeBase
+              Learn NativfeBase
             </Text>
           </Link>
           <ToggleDarkMode />
