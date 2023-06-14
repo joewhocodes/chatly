@@ -1,6 +1,5 @@
-import React from 'react';
-
-import { Text, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
 	updateProfile,
@@ -18,7 +17,7 @@ import { StackNavigator } from '../components/Navigation/Types';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation }: ChatListScreenProps) => {
-	const handleSignInGuest = () => {
+	useEffect(() => {
 		signInAnonymously(auth)
 			.then(() => {
 				console.log('user created');
@@ -32,9 +31,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 							photoURL:
 								'https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x',
 						});
-						console.log(user);
-					} else {
-						// User is signed out
 					}
 				});
 			})
@@ -43,21 +39,12 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 				const errorMessage = error.message;
 				// ...
 			});
-	};
+	}, []);
 
 	return (
 		<>
-			<Text>Hey</Text>
-			<TouchableOpacity onPress={handleSignInGuest}>
-				<Text
-					style={{
-						fontWeight: 'bold',
-						fontSize: 18,
-					}}>
-					{' '}
-					Sign Up
-				</Text>
-			</TouchableOpacity>
+			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>New User</Text>
+			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
 		</>
 	);
 };
