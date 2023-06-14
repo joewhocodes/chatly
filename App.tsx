@@ -19,6 +19,7 @@ import {
 	adjectives,
 	animals,
 } from 'unique-names-generator';
+import { AvatarGenerator } from 'random-avatar-generator';
 
 // Define the config
 const config = {
@@ -34,6 +35,9 @@ declare module 'native-base' {
 }
 
 export default function App() {
+
+	const generator = new AvatarGenerator();
+
 	useEffect(() => {
 		signInAnonymously(auth)
 			.then(() => {
@@ -45,8 +49,7 @@ export default function App() {
 								dictionaries: [adjectives, animals],
 								length: 2,
 							}),
-							photoURL:
-								'https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x',
+							photoURL: generator.generateRandomAvatar(),
 						});
 					}
 				});
