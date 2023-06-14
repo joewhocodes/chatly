@@ -40,16 +40,21 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					user: doc.data().user,
 				}))
 			);
-			
 		});
 		return unsubscribe;
 	}, []);
+	
+// const snapshot = await citiesRef.get();
+// snapshot.forEach(doc => {
+//   console.log(doc.id, '=>', doc.data());
+// });
 
 	const onSend = useCallback((messages: IMessage[]) => {
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
 		);
 		const { _id, createdAt, text, user } = messages[0];
+		// console.log(doc(collection(db, 'newChats'), 'colorful_prawn'))
 		addDoc(collection(db, 'chats'), {
 			_id,
 			createdAt,
@@ -58,6 +63,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 	}, []);
 
+	// console.log(doc(collection(db, 'newChats'), 'colorful_prawn'))
+	
 	return (
 		<>
 			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>New User</Text>
