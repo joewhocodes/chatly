@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StackNavigator } from './types';
 
 import ChatListScreen from '../../screens/ChatList';
-// import ChatScreen from '../../screens/Chat'
+import ChatScreen from '../../screens/Chat';
 
 const Stack = createStackNavigator<StackNavigator>();
 
@@ -14,7 +14,7 @@ const Navigation = () => {
 		<NavigationContainer>
 			<Stack.Navigator>
 				<Stack.Screen name='ChatList' component={ChatListScreen} />
-				{/* <Stack.Screen name='Chat' component={ChatScreen} /> */}
+				<Stack.Screen name='Chat' component={ChatScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

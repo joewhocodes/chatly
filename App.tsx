@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	Text,
 	HStack,
@@ -7,11 +7,18 @@ import {
 	NativeBaseProvider,
 	extendTheme,
 } from 'native-base';
-import NativeBaseIcon from './components/NativeBaseIcon';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import ChatListScreen from './screens/ChatList';
 import Navigation from './components/Navigation/index';
+import {
+	updateProfile,
+	signInAnonymously,
+	onAuthStateChanged,
+} from 'firebase/auth';
+import { auth } from './firebase/firebase';
+import {
+	uniqueNamesGenerator,
+	adjectives,
+	animals,
+} from 'unique-names-generator';
 
 // Define the config
 const config = {
@@ -19,15 +26,38 @@ const config = {
 	initialColorMode: 'dark',
 };
 
-const Stack = createStackNavigator();
-
 // extend the theme
 export const theme = extendTheme({ config });
 type MyThemeType = typeof theme;
 declare module 'native-base' {
 	interface ICustomTheme extends MyThemeType {}
 }
+
 export default function App() {
+	useEffect(() => {
+		signInAnonymously(auth)
+			.then(() => {
+				console.log('user created');
+				onAuthStateChanged(auth, user => {
+					if (user) {
+						updateProfile(user, {
+							displayName: uniqueNamesGenerator({
+								dictionaries: [adjectives, animals],
+								length: 2,
+							}),
+							photoURL:
+								'https://gravatar.com/avatar/94d45dbdba988afacf30d916e7aaad69?s=200&d=mp&r=x',
+						});
+					}
+				});
+			})
+			.catch(error => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// ...
+			});
+	}, []);
+
 	return (
 		<NativeBaseProvider>
 			<Navigation />
