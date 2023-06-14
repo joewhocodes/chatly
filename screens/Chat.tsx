@@ -4,28 +4,32 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 import {
 	collection,
+	doc,
 	addDoc,
 	orderBy,
 	query,
 	onSnapshot,
+	setDoc,
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
-const Chat = ({ navigation }: ChatScreenProps) => {
+const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined = currentUser?.displayName || 'Unknown User';
 	const currentAvatar: string | undefined = currentUser?.photoURL || 'Unknown photo';
-
+	
+	const { itemId } = route.params;
+	console.log(itemId);
+	
 	useLayoutEffect(() => {
 		const collectionRef = collection(db, 'chats');
 		const q = query(collectionRef, orderBy('createdAt', 'desc'));
 		
-
 		const unsubscribe = onSnapshot(q, querySnapshot => {
 			console.log('querySnapshot unsubscribe');
 			setMessages(
@@ -36,6 +40,7 @@ const Chat = ({ navigation }: ChatScreenProps) => {
 					user: doc.data().user,
 				}))
 			);
+			
 		});
 		return unsubscribe;
 	}, []);
