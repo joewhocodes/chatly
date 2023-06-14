@@ -23,8 +23,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const currentUserName: string | undefined = currentUser?.displayName || 'Unknown User';
 	const currentAvatar: string | undefined = currentUser?.photoURL || 'Unknown photo';
 	
-	const { itemId } = route.params;
-	console.log(itemId);
+	// const { itemId } = route.params;
+	// console.log(itemId);
 	
 	useLayoutEffect(() => {
 		const collectionRef = collection(db, 'chats');
@@ -67,7 +67,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	
 	return (
 		<>
-			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>New User</Text>
+			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>{route.params.chatName}</Text>
 			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
 			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
 				<Text>Go to ChatList</Text>

@@ -20,7 +20,7 @@ import {
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatName: string; }[]>([]);
+	const [chats, setChats] = useState<{ chatName: string }[]>([]);
 
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
@@ -44,18 +44,17 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
 		const allChatDocuments = onSnapshot(dbRef, docsSnap => {
-		  const chatArray: { chatName: string }[] = [];
-		  docsSnap.forEach(doc => {
-			const chat = {
-			  chatName: doc.id,
-			};
-			chatArray.push(chat);
-		  });
-		  setChats(chatArray);
+			const chatArray: { chatName: string }[] = [];
+			docsSnap.forEach(doc => {
+				const chat = {
+					chatName: doc.id,
+				};
+				chatArray.push(chat);
+			});
+			setChats(chatArray);
 		});
 		return allChatDocuments;
-	  }, []);
-	
+	}, []);
 
 	return (
 		<>
@@ -64,13 +63,22 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			<TouchableOpacity
 				onPress={() =>
 					navigation.navigate('Chat', {
-						itemId: 86,
-						otherParam: 'anything you want here',
+						chatName: '',
 					})
 				}>
 				<Text>Go to Chat</Text>
 			</TouchableOpacity>
-			{chats.length && chats.map(chat => <Text>{chat.chatName}</Text>)}
+			{!!chats.length &&
+				chats.map(chat => (
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate('Chat', {
+								chatName: chat.chatName,
+							});
+						}}>
+						<Text>{chat.chatName}</Text>
+					</TouchableOpacity>
+				))}
 			<TouchableOpacity onPress={handleCreateNewChat}>
 				<Text>Create new chat</Text>
 			</TouchableOpacity>

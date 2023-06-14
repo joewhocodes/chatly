@@ -1,6 +1,5 @@
 type ChatProps = {
-	itemId: number;
-	otherParam: string;
+	chatName: string;
 };
 
 export type StackNavigator = {
