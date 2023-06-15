@@ -3,7 +3,16 @@ import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 
-import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import {
+	collection,
+	deleteDoc,
+	doc,
+	onSnapshot,
+	orderBy,
+	query,
+	setDoc,
+	serverTimestamp,
+} from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import {
 	uniqueNamesGenerator,
@@ -26,25 +35,26 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			separator: ' ',
 		});
 		const dbRef = doc(collection(db, 'chats'));
-		setDoc(dbRef, { name: newChatName });
+		setDoc(dbRef, { name: newChatName, createdAt: serverTimestamp() });
 	};
 
 	const handleDeleteChat = (chatId: string) => {
 		console.log(chatId);
 		const docRef = doc(db, 'chats', chatId); // Update the document reference path
 		deleteDoc(docRef)
-		  .then(() => {
-			console.log('Entire Document has been deleted successfully.');
-		  })
-		  .catch((error) => {
-			console.log(error);
-		  });
+			.then(() => {
+				console.log('Entire Document has been deleted successfully.');
+			})
+			.catch(error => {
+				console.log(error);
+			});
 		console.log('test');
-	  };
+	};
 
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
-		const allChatDocuments = onSnapshot(dbRef, docsSnap => {
+		const q = query(dbRef, orderBy('createdAt'));
+		const allChatDocuments = onSnapshot(q, docsSnap => {
 			const chatArray: { chatId: string; chatName: string }[] = [];
 			docsSnap.forEach(doc => {
 				const chat = {
@@ -75,7 +85,8 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 						key={chat.chatId}>
 						<Text>
 							{chat.chatName}
-							<TouchableOpacity onPress={() => handleDeleteChat(chat.chatId)}>
+							<TouchableOpacity
+								onPress={() => handleDeleteChat(chat.chatId)}>
 								<Text>X</Text>
 							</TouchableOpacity>
 						</Text>
