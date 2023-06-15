@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
@@ -6,7 +6,6 @@ import { auth, db } from '../firebase/firebase';
 import {
 	collection,
 	doc,
-	getDoc,
 	onSnapshot,
 	setDoc,
 } from 'firebase/firestore';
@@ -27,10 +26,8 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			dictionaries: [adjectives, animals],
 			length: 2,
 		});
-
 		const dbRef = doc(collection(db, 'chats'));
 		setDoc(dbRef, { name: newChatName });
-		console.log('new chat created');
 	};
 
 	useLayoutEffect(() => {
