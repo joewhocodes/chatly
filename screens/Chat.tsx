@@ -10,8 +10,6 @@ import {
 	orderBy,
 	query,
 	onSnapshot,
-	DocumentReference, 
-	DocumentData,
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
@@ -22,7 +20,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [chatName, setChatName] = useState<string>('');
+	const [chatName, setChatName] = useState<string>(route.params.chatName);
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined =
