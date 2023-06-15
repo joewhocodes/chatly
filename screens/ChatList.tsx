@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
@@ -31,13 +31,27 @@ import {
 	Divider,
 	ScrollView,
 } from 'native-base';
+import { onAuthStateChanged } from 'firebase/auth';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
-		[]
-	);
+	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>([]);
+	const [user, setUser] = useState(auth.currentUser);
 
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		  if (user) {
+			setUser(user);
+		  } else {
+			setUser(null);
+		  }
+		});
+	
+		return () => unsubscribe();
+	  }, []);
+
+	  
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
@@ -79,35 +93,32 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		return allChatDocuments;
 	}, []);
 
-	console.log(auth.currentUser)
+	console.log('auth.currentUser:', auth.currentUser);
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
-			<Box backgroundColor={'primary.500'}>
-				<Center mt={'20px'}>
-					<Image source={require('../assets/logo.png')} alt={'logo'}/>
-				</Center>
-				{auth.currentUser && (
-					<>
-						<Image
-							source={
-								auth.currentUser.photoURL
-									? { uri: auth.currentUser.photoURL }
-									: require('../assets/favicon.png')
-							}
-							alt={'user avatar'}
-						/>
-						<Heading
-							color={'white'}
-							ml={'20px'}
-							fontFamily={'Jua-Regular'}>
-							Hey {auth.currentUser.displayName}!!
-						</Heading>
-					</>
-				)}
-				<Center mt={'20px'} pb={'20px'}>
-					<Image source={require('../assets/dots.png')} alt={'dots'}/>
-				</Center>
+		<Box backgroundColor={'primary.500'}>
+		  <Center mt={'20px'}>
+			<Image source={require('../assets/logo.png')} alt={'logo'} />
+		  </Center>
+		  {user && (
+			<>
+			  <Image
+				source={
+				  user.photoURL
+					? { uri: user.photoURL }
+					: require('../assets/favicon.png')
+				}
+				alt={'user avatar'}
+			  />
+			  <Heading color={'white'} ml={'20px'} fontFamily={'Jua-Regular'}>
+				Hey {user.displayName}!!
+			  </Heading>
+			</>
+		  )}
+		  <Center mt={'20px'} pb={'20px'}>
+			<Image source={require('../assets/dots.png')} alt={'dots'} />
+		  </Center>
 			</Box>
 			<ScrollView>
 				<Box>
