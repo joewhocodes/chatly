@@ -25,6 +25,7 @@ import {
 	query,
 	setDoc,
 	serverTimestamp,
+	getDoc,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebase';
 
@@ -104,16 +105,31 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		);
 	};
 
-	const handleCreateNewChat = () => {
+	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({
-			dictionaries: [adjectives, animals],
-			length: 2,
-			style: 'capital',
-			separator: ' ',
+		  dictionaries: [adjectives, animals],
+		  length: 2,
+		  style: 'capital',
+		  separator: ' ',
 		});
-		const dbRef = doc(collection(db, 'chats'));
-		setDoc(dbRef, { name: newChatName, createdAt: serverTimestamp() });
-	};
+	  
+		const docRef = doc(collection(db, 'chats'));
+		const newChat = {
+		  name: newChatName,
+		  createdAt: serverTimestamp(),
+		};
+	  
+		try {
+			navigation.navigate('Chat', {
+			  chatId: docRef.id,
+			  chatName: newChatName,
+			});
+		setDoc(docRef, newChat);
+		} catch (error) {
+		  console.log('Error creating new chat:', error);
+		}
+	  };
+	  
 
 	const handleDeleteChat = (chatId: string) => {
 		const docRef = doc(db, 'chats', chatId);
