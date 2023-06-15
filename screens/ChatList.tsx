@@ -27,20 +27,16 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			dictionaries: [adjectives, animals],
 			length: 2,
 		});
-		setDoc(doc(db, 'chats', newChatName), {});
+		const data = {
+			name: newChatName,
+			messages: [],
+		};
+
+		const dbRef = doc(collection(db, 'chats')); // Create a document reference
+		setDoc(dbRef, data);
 		console.log('new chat created');
 	};
 
-	// get one doc
-	const handleGetData = async () => {
-		try {
-			const docRef = doc(db, 'chats', 'defeated_mockingbird');
-			const docSnap = await getDoc(docRef);
-			console.log(docSnap.data());
-		} catch (error) {
-			console.log(error);
-		}
-	};
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
 		const allChatDocuments = onSnapshot(dbRef, docsSnap => {
@@ -75,15 +71,14 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 							navigation.navigate('Chat', {
 								chatName: chat.chatName,
 							});
-						}}>
+						}}
+						key={chat.chatName} // Add a unique key for each chat
+					>
 						<Text>{chat.chatName}</Text>
 					</TouchableOpacity>
 				))}
 			<TouchableOpacity onPress={handleCreateNewChat}>
 				<Text>Create new chat</Text>
-			</TouchableOpacity>
-			<TouchableOpacity onPress={handleGetData}>
-				<Text>Get data</Text>
 			</TouchableOpacity>
 		</>
 	);
