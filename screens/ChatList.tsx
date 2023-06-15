@@ -3,12 +3,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 
-import {
-	collection,
-	doc,
-	onSnapshot,
-	setDoc,
-} from 'firebase/firestore';
+import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import {
 	uniqueNamesGenerator,
@@ -19,12 +14,16 @@ import {
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string, chatName: string }[]>([]);
+	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
+		[]
+	);
 
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
 			length: 2,
+			style: 'capital',
+			separator: ' ',
 		});
 		const dbRef = doc(collection(db, 'chats'));
 		setDoc(dbRef, { name: newChatName });
@@ -33,13 +32,11 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
 		const allChatDocuments = onSnapshot(dbRef, docsSnap => {
-
-			const chatArray: { chatId: string, chatName: string }[] = [];
+			const chatArray: { chatId: string; chatName: string }[] = [];
 			docsSnap.forEach(doc => {
-				const data = doc.data()
 				const chat = {
 					chatId: doc.id,
-					chatName: doc.data().name
+					chatName: doc.data().name,
 				};
 				chatArray.push(chat);
 			});
@@ -61,8 +58,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 								chatName: chat.chatName,
 							});
 						}}
-						key={chat.chatId}
-					>
+						key={chat.chatId}>
 						<Text>{chat.chatName}</Text>
 					</TouchableOpacity>
 				))}
