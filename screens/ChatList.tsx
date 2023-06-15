@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { TouchableOpacity, Animated } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
 import {
@@ -12,7 +12,10 @@ import {
 	Text,
 	Image,
 	ScrollView,
+	View,
 } from 'native-base';
+
+import { Swipeable } from 'react-native-gesture-handler';
 
 import {
 	collection,
@@ -39,6 +42,44 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		[]
 	);
 
+	const SwipeableItem = ({ item, onDelete }) => {
+		const renderRightActions = (progress, dragX) => {
+		  const onDeletePress = () => {
+			onDelete(item.chatId);
+		  };
+	  
+		  const trans = dragX.interpolate({
+			inputRange: [-100, 0],
+			outputRange: [1, 0],
+			extrapolate: 'clamp',
+		  });
+	  
+		  return (
+			<TouchableOpacity onPress={onDeletePress}>
+			  <Animated.View
+				style={{
+				  backgroundColor: 'red',
+				  justifyContent: 'center',
+				  alignItems: 'flex-end',
+				  padding: 10,
+				  opacity: trans,
+				}}
+			  >
+				<Text style={{ color: 'white' }}>Delete</Text>
+			  </Animated.View>
+			</TouchableOpacity>
+		  );
+		};
+	  
+		return (
+		  <Swipeable renderRightActions={renderRightActions}>
+			<View style={{ backgroundColor: 'white', padding: 20 }}>
+			  <Text>{item.chatName}</Text>
+			</View>
+		  </Swipeable>
+		);
+	  };
+
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
@@ -51,7 +92,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	};
 
 	const handleDeleteChat = (chatId: string) => {
-		console.log(chatId);
 		const docRef = doc(db, 'chats', chatId);
 		deleteDoc(docRef)
 			.then(() => {
@@ -129,6 +169,8 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					<VStack space={5} alignItems='center'>
 						{!!chats.length &&
 							chats.map(chat => (
+								
+								<SwipeableItem key={chat.chatId} item={chat} onDelete={() => handleDeleteChat(chat.chatId)}>
 								<Center
 									w='90%'
 									h='20'
@@ -146,6 +188,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 										<Text fontFamily={'Jua-Regular'}>{chat.chatName}</Text>
 									</TouchableOpacity>
 								</Center>
+								</SwipeableItem>
 							))}
 					</VStack>
 				</Box>
