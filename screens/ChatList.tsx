@@ -12,7 +12,6 @@ import {
 	Text,
 	Image,
 	ScrollView,
-	View,
 } from 'native-base';
 
 import { Swipeable } from 'react-native-gesture-handler';
@@ -47,7 +46,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const swipeableRef = useRef(null);
 
 		const handleSwipeStart = () => {
-			setIsSwiping(true); 
+			setIsSwiping(true);
 		};
 
 		const handleSwipeRelease = () => {
@@ -69,7 +68,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 				inputRange: [0, 100],
 				outputRange: [0, 1],
 				extrapolate: 'clamp',
-			  });
+			});
 
 			return (
 				<TouchableOpacity onPress={onDeletePress}>
