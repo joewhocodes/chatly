@@ -22,6 +22,7 @@ import {
 import { VStack, Center, Heading, Button, Flex, Box, Text, Image, Divider } from 'native-base';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
+
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
 		[]
@@ -75,7 +76,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					<Image source={require('../assets/logo.png')} />
 				</Center>
 				{auth.currentUser && (
-					<Heading color={'white'} ml={'20px'}>
+					<Heading color={'white'} ml={'20px'} fontFamily={'Jua-Regular'}>
 						Hey {auth.currentUser.displayName}!
 					</Heading>
 				)}

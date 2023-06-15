@@ -21,6 +21,7 @@ import {
 } from 'unique-names-generator';
 import { AvatarGenerator } from 'random-avatar-generator';
 import { SSRProvider } from '@react-aria/ssr';
+import { useFonts } from 'expo-font';
 
 import { config } from './theme';
 
@@ -34,6 +35,10 @@ declare module 'native-base' {
 
 export default function App() {
 	const generator = new AvatarGenerator();
+
+	const [fontsLoaded] = useFonts({
+		'Jua-Regular': require('./assets/fonts/Jua-Regular.ttf'),
+	  });
 
 	useEffect(() => {
 		signInAnonymously(auth)
