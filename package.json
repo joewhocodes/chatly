@@ -18,6 +18,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-aria/ssr": "^3.6.0",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",

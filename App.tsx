@@ -20,6 +20,7 @@ import {
 	animals,
 } from 'unique-names-generator';
 import { AvatarGenerator } from 'random-avatar-generator';
+import { SSRProvider } from '@react-aria/ssr';
 
 // Define the config
 const config = {
@@ -64,9 +65,11 @@ export default function App() {
 	
 
 	return (
-		<NativeBaseProvider>
-			<Navigation />
-		</NativeBaseProvider>
+		<SSRProvider>
+			<NativeBaseProvider>
+				<Navigation />
+			</NativeBaseProvider>
+		</SSRProvider>
 	);
 }
 

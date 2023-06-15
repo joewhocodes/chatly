@@ -58,6 +58,12 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 	}, []);
 
+	const handleUpdateName = (oldName: string, newName: string): void => {
+		console.log(oldName);
+		console.log(newName);
+		setShowModal(false);
+	  };
+
 	return (
 		<>
 			<TouchableOpacity onPress={() => setShowModal(true)}>
@@ -73,7 +79,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					<Modal.Header>Change Chat Name</Modal.Header>
 					<Modal.Body>
 						<FormControl mb='3'>
-							{/* <FormControl.Label>Email</FormControl.Label> */}
+							<FormControl.Label>Email</FormControl.Label>
 							<Input />
 						</FormControl>
 					</Modal.Body>
@@ -89,7 +95,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							</Button>
 							<Button
 								onPress={() => {
-									setShowModal(false);
+									handleUpdateName((e => e.target.value), route.params.chatName);
 								}}>
 								Save
 							</Button>
