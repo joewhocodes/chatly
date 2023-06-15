@@ -47,8 +47,9 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	return (
 		<>
-			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>New User</Text>
-			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
+			{auth.currentUser && (
+				<Text>Welcome {auth.currentUser.displayName}!</Text>
+			)}
 			{!!chats.length &&
 				chats.map(chat => (
 					<TouchableOpacity
@@ -63,7 +64,9 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					</TouchableOpacity>
 				))}
 			<TouchableOpacity onPress={handleCreateNewChat}>
-				<Text>Create new chat</Text>
+				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+					Create new chat
+				</Text>
 			</TouchableOpacity>
 		</>
 	);
