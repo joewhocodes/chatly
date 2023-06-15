@@ -10,6 +10,8 @@ import {
 	orderBy,
 	query,
 	onSnapshot,
+	DocumentReference, 
+	DocumentData,
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
@@ -20,7 +22,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [newChatName, setNewChatName] = useState<string>(route.params.chatName);
+	const [chatName, setChatName] = useState<string>('');
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined =
@@ -47,7 +49,6 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 		return unsubscribe;
 	}, []);
-
 	const onSend = useCallback((messages: IMessage[]) => {
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
@@ -60,17 +61,29 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			user,
 		});
 	}, []);
-
-	const handleUpdateName = (oldName: string, newName: string): void => {
-		const docRef = doc(db, "chats", route.params.chatId);
-		updateDoc(docRef, {name: newName})
-		console.log(oldName);
-		console.log(newName);
-		setShowModal(false);
-	};
+	
+	const handleUpdateName = (oldName: string, newName: string) => {
+		const docRef = doc(db, 'chats', route.params.chatId);
+	  
+		const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+		  if (docSnapshot.exists()) {
+			updateDoc(docRef, { name: newName })
+			  .then(() => {
+				console.log('Name updated successfully!');
+				setShowModal(false);
+				navigation.setParams({ chatName: newName }); // Update route.params.chatName
+			  })
+			  .catch((error) => {
+				console.error('Error updating name:', error);
+			  });
+		  }
+		});
+	  
+		return unsubscribe;
+	  };
 
 	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
-		setNewChatName(e.nativeEvent.text);
+		setChatName(e.nativeEvent.text);
 	};
 
 	return (
@@ -88,7 +101,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					<Modal.Header>Change Chat Name</Modal.Header>
 					<Modal.Body>
 						<FormControl mb='3' mt='3'>
-							<Input value={newChatName} onChange={onChange} />
+							<Input value={chatName} onChange={onChange} />
 						</FormControl>
 					</Modal.Body>
 					<Modal.Footer>
@@ -97,6 +110,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								variant='ghost'
 								colorScheme='blueGray'
 								onPress={() => {
+									setChatName(route.params.chatName)
 									setShowModal(false);
 								}}
 								>
@@ -104,7 +118,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							</Button>
 							<Button
 								onPress={() => {
-									handleUpdateName(route.params.chatName, newChatName);
+									handleUpdateName(route.params.chatName, chatName);
 								}}>
 								Save
 							</Button>
