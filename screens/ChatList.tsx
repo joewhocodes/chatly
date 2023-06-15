@@ -27,13 +27,9 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			dictionaries: [adjectives, animals],
 			length: 2,
 		});
-		const data = {
-			name: newChatName,
-			// messages: [],
-		};
 
 		const dbRef = doc(collection(db, 'chats'));
-		setDoc(dbRef, data);
+		setDoc(dbRef, { name: newChatName });
 		console.log('new chat created');
 	};
 
