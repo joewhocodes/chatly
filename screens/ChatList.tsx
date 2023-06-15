@@ -19,7 +19,7 @@ import {
 	adjectives,
 	animals,
 } from 'unique-names-generator';
-import { VStack, Center, Heading, Button, Flex, Box, Text, Image, Divider } from 'native-base';
+import { VStack, Center, Heading, Button, Flex, Box, Text, Image, Divider, ScrollView } from 'native-base';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 
@@ -54,7 +54,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
-		const q = query(dbRef, orderBy('createdAt'));
+		const q = query(dbRef, orderBy('createdAt', 'desc'));
 		const allChatDocuments = onSnapshot(q, docsSnap => {
 			const chatArray: { chatId: string; chatName: string }[] = [];
 			docsSnap.forEach(doc => {
@@ -70,7 +70,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	}, []);
 
 	return (
-		<Box>
+		<Box h='100%' backgroundColor='secondary.500'>
 			<Box backgroundColor={'primary.500'}>
 				<Center mt={'20px'}>
 					<Image source={require('../assets/logo.png')} />
@@ -84,50 +84,53 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					<Image source={require('../assets/dots.png')} />
 				</Center>
 			</Box>
-			<Box backgroundColor={'secondary.500'}>
-				<Flex flexDirection={'row'} justifyContent={'space-between'} mt={'15px'} mb={'15px'}>
-					<Heading ml={'30px'}  color={'white'} fontFamily={'Jua-Regular'}>
-						Chatrooms
-					</Heading>
-					<TouchableOpacity>
-						<Button mr={'20px'} alignSelf={'end'} backgroundColor={'teal.500'} onPress={handleCreateNewChat}>
-							+
-						</Button>
-					</TouchableOpacity>
-				</Flex>
-				<Center pb={'20px'}>
-					<Image source={require('../assets/dots-white.png')} />
-				</Center>
-				{!!chats.length &&
-					chats.map(chat => (
-						<VStack space={4} alignItems='center' key={chat.chatId}>
-							<Center
-								w='64'
-								h='20'
-								bg='indigo.700'
-								rounded='md'
-								shadow={3}>
-								<TouchableOpacity
-									onPress={() => {
-										navigation.navigate('Chat', {
-											chatId: chat.chatId,
-											chatName: chat.chatName,
-										});
-									}}>
-									<Text>
-										{chat.chatName}
-										<TouchableOpacity
-											onPress={() =>
-												handleDeleteChat(chat.chatId)
-											}>
-											<Text>X</Text>
-										</TouchableOpacity>
-									</Text>
-								</TouchableOpacity>
-							</Center>
-						</VStack>
-					))}
-			</Box>
+			<ScrollView>
+				<Box>
+					<Flex flexDirection={'row'} justifyContent={'space-between'} mt={'15px'} mb={'15px'}>
+						<Heading  color={'white'} ml={'30px'} fontFamily={'Jua-Regular'}>
+							Chatrooms
+						</Heading>
+						<TouchableOpacity>
+							<Button mr={'20px'} alignSelf={'end'} backgroundColor={'teal.500'} onPress={handleCreateNewChat}>
+								+
+							</Button>
+						</TouchableOpacity>
+					</Flex>
+					<Center pb={'20px'}>
+						<Image source={require('../assets/dots-white.png')} />
+					</Center>
+					{!!chats.length &&
+						chats.map(chat => (
+							<VStack space={5} alignItems='center' key={chat.chatId}>
+								<Center
+									w='90%'
+									h='20'
+									mt='3'
+									bg='white'
+									rounded='md'
+									shadow={7}>
+									<TouchableOpacity
+										onPress={() => {
+											navigation.navigate('Chat', {
+												chatId: chat.chatId,
+												chatName: chat.chatName,
+											});
+										}}>
+										<Text>
+											{chat.chatName}
+											<TouchableOpacity
+												onPress={() =>
+													handleDeleteChat(chat.chatId)
+												}>
+												<Text>X</Text>
+											</TouchableOpacity>
+										</Text>
+									</TouchableOpacity>
+								</Center>
+							</VStack>
+						))}
+				</Box>
+			</ScrollView>
 		</Box>
 	);
 };
