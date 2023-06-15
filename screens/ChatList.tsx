@@ -85,14 +85,19 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 				</Center>
 			</Box>
 			<Box backgroundColor={'secondary.500'}>
-				<Flex flexDirection={'row'} justifyContent={'space-between'}>
-					<Heading ml={'30px'} color={'secondary.500'}>
+				<Flex flexDirection={'row'} justifyContent={'space-between'} mt={'15px'} mb={'15px'}>
+					<Heading ml={'30px'}  color={'white'} fontFamily={'Jua-Regular'}>
 						Chatrooms
 					</Heading>
-					<Button mr={'20px'} alignSelf={'end'}>
-						+
-					</Button>
+					<TouchableOpacity>
+						<Button mr={'20px'} alignSelf={'end'} backgroundColor={'teal.500'} onPress={handleCreateNewChat}>
+							+
+						</Button>
+					</TouchableOpacity>
 				</Flex>
+				<Center pb={'20px'}>
+					<Image source={require('../assets/dots-white.png')} />
+				</Center>
 				{!!chats.length &&
 					chats.map(chat => (
 						<VStack space={4} alignItems='center' key={chat.chatId}>
@@ -122,11 +127,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 							</Center>
 						</VStack>
 					))}
-				<TouchableOpacity onPress={handleCreateNewChat}>
-					<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-						Create new chat
-					</Text>
-				</TouchableOpacity>
 			</Box>
 		</Box>
 	);
