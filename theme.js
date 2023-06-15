@@ -1,6 +1,4 @@
 export const config = {
-	useSystemColorMode: false,
-	initialColorMode: 'dark',
 	colors: {
 		// Add new color
 		primary: {
