@@ -72,7 +72,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			.catch(error => {
 				console.log(error);
 			});
-		console.log('test');
 	};
 
 	useLayoutEffect(() => {
@@ -91,8 +90,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		});
 		return allChatDocuments;
 	}, []);
-
-	console.log('auth.currentUser:', auth.currentUser);
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>

@@ -40,8 +40,9 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	const currentUserName: string | undefined =
 		currentUser?.displayName || 'Unknown User';
-	const currentAvatar: string | undefined =
-		currentUser?.photoURL || 'Unknown photo';
+		const currentAvatar: string | undefined =
+		currentUser?.photoURL || undefined; // Assign undefined instead of 'Unknown photo'
+	
 
 	useLayoutEffect(() => {
 		const collectionRef = collection(
@@ -100,8 +101,6 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	): void => {
 		setChatName(e.nativeEvent.text);
 	};
-
-	console.log(`currentUser`, currentUser);
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
@@ -182,7 +181,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				}}
 				user={{
 					_id: currentUserName,
-					avatar: 'https://i.pravatar.cc/300',
+					avatar: currentAvatar,
 				}}
 			/>
 		</Box>
