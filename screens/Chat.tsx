@@ -5,6 +5,8 @@ import { auth, db } from '../firebase/firebase';
 import {
 	collection,
 	addDoc,
+	doc,
+	updateDoc,
 	orderBy,
 	query,
 	onSnapshot,
@@ -18,7 +20,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [newChatName, setNewChatName] = useState<string>('');
+	const [newChatName, setNewChatName] = useState<string>(route.params.chatName);
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined =
@@ -60,6 +62,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	}, []);
 
 	const handleUpdateName = (oldName: string, newName: string): void => {
+		const docRef = doc(db, "chats", route.params.chatId);
+		updateDoc(docRef, {name: newName})
 		console.log(oldName);
 		console.log(newName);
 		setShowModal(false);
@@ -68,7 +72,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setNewChatName(e.nativeEvent.text);
 	};
-	
+
 	return (
 		<>
 			<TouchableOpacity onPress={() => setShowModal(true)}>
