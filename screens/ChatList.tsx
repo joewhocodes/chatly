@@ -28,30 +28,29 @@ import {
 	Box,
 	Text,
 	Image,
-	Divider,
 	ScrollView,
 } from 'native-base';
 import { onAuthStateChanged } from 'firebase/auth';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>([]);
+	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
+		[]
+	);
 	const [user, setUser] = useState(auth.currentUser);
 
-
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-		  if (user) {
-			setUser(user);
-		  } else {
-			setUser(null);
-		  }
+		const unsubscribe = onAuthStateChanged(auth, user => {
+			if (user) {
+				setUser(user);
+			} else {
+				setUser(null);
+			}
 		});
-	
-		return () => unsubscribe();
-	  }, []);
 
-	  
+		return () => unsubscribe();
+	}, []);
+
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
@@ -97,33 +96,42 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
-		<Box backgroundColor={'primary.500'}>
-		  <Center mt={'20px'}>
-			<Image source={require('../assets/logo.png')} alt={'logo'} />
-		  </Center>
-		  {user && (
-			<>
-			  <Image
-				source={
-				  user.photoURL
-					? { uri: user.photoURL }
-					: require('../assets/favicon.png')
-				}
-				alt={'user avatar'}
-			  />
-			  <Heading color={'white'} ml={'20px'} fontFamily={'Jua-Regular'}>
-				Hey {user.displayName}!!
-			  </Heading>
-			</>
-		  )}
-		  <Center mt={'20px'} pb={'20px'}>
-			<Image source={require('../assets/dots.png')} alt={'dots'} />
-		  </Center>
+			<Box backgroundColor={'primary.500'}>
+				<Center mt={'20px'}>
+					<Image
+						source={require('../assets/logo.png')}
+						alt={'logo'}
+					/>
+				</Center>
+				{user && (
+					<>
+						<Image
+							source={
+								user.photoURL
+									? { uri: user.photoURL }
+									: require('../assets/favicon.png')
+							}
+							alt={'user avatar'}
+						/>
+						<Heading
+							color={'white'}
+							ml={'20px'}
+							fontFamily={'Jua-Regular'}>
+							Hey {user.displayName}!!
+						</Heading>
+					</>
+				)}
+				<Center mt={'20px'} pb={'20px'}>
+					<Image
+						source={require('../assets/dots.png')}
+						alt={'dots'}
+					/>
+				</Center>
 			</Box>
 			<ScrollView>
 				<Box>
 					<Flex
-						flexDirection={'row'}
+						direction={'row'}
 						justifyContent={'space-between'}
 						mt={'15px'}
 						mb={'15px'}>
@@ -144,7 +152,10 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 						</TouchableOpacity>
 					</Flex>
 					<Center pb={'20px'}>
-						<Image source={require('../assets/dots-white.png')} alt={'dots'}/>
+						<Image
+							source={require('../assets/dots-white.png')}
+							alt={'dots'}
+						/>
 					</Center>
 					<VStack space={5} alignItems='center'>
 						{!!chats.length &&

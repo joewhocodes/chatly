@@ -1,5 +1,9 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { Text, TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
+import {
+	TouchableOpacity,
+	TextInputChangeEventData,
+	NativeSyntheticEvent,
+} from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 import {
@@ -13,7 +17,18 @@ import {
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { Button, FormControl, Input, Modal } from 'native-base';
+import {
+	Box,
+	Button,
+	Center,
+	Image,
+	FormControl,
+	Heading,
+	Input,
+	Modal,
+	Text,
+	Flex,
+} from 'native-base';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
@@ -59,39 +74,69 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			user,
 		});
 	}, []);
-	
+
 	const handleUpdateName = (oldName: string, newName: string) => {
 		const docRef = doc(db, 'chats', route.params.chatId);
-	  
-		const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
-		  if (docSnapshot.exists()) {
-			updateDoc(docRef, { name: newName })
-			  .then(() => {
-				console.log('Name updated successfully!');
-				setShowModal(false);
-				navigation.setParams({ chatName: newName }); // Update route.params.chatName
-			  })
-			  .catch((error) => {
-				console.error('Error updating name:', error);
-			  });
-		  }
-		});
-	  
-		return unsubscribe;
-	  };
 
-	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
+		const unsubscribe = onSnapshot(docRef, docSnapshot => {
+			if (docSnapshot.exists()) {
+				updateDoc(docRef, { name: newName })
+					.then(() => {
+						console.log('Name updated successfully!');
+						setShowModal(false);
+						navigation.setParams({ chatName: newName }); // Update route.params.chatName
+					})
+					.catch(error => {
+						console.error('Error updating name:', error);
+					});
+			}
+		});
+
+		return unsubscribe;
+	};
+
+	const onChange = (
+		e: NativeSyntheticEvent<TextInputChangeEventData>
+	): void => {
 		setChatName(e.nativeEvent.text);
 	};
 
+	console.log(`currentUser`, currentUser);
+
 	return (
-		<>
-			<TouchableOpacity onPress={() => setShowModal(true)}>
-				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-					{route.params.chatName}
-				</Text>
-				<Text>Tap to change name</Text>
-			</TouchableOpacity>
+		<Box h='100%' backgroundColor='secondary.500'>
+			<Box backgroundColor={'primary.500'}>
+				<Box mt={'20px'}>
+					<Flex direction='row' justifyContent={'space-between'}>
+						<Box>
+							<TouchableOpacity
+								onPress={() => navigation.navigate('ChatList')}>
+							<Image 
+								source={require('../assets/back-arrow.png')}
+								alt={'back arrow'}
+								mt='7px'
+							/>
+							</TouchableOpacity>
+						</Box>
+						<Image 
+							source={require('../assets/logo.png')}
+							alt={'logo'}
+							mr={'45px'}
+						/>
+						<Text></Text>
+					</Flex>
+					<Center>
+						<Heading color={'white'} fontFamily={'Jua-Regular'}>
+							{chatName}
+						</Heading>
+						<TouchableOpacity onPress={() => setShowModal(true)}>
+							<Text color='white' fontFamily={'Jua-Regular'}>
+								Tap to change name
+							</Text>
+						</TouchableOpacity>
+					</Center>
+				</Box>
+			</Box>
 
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
 				<Modal.Content maxWidth='400px'>
@@ -108,15 +153,17 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								variant='ghost'
 								colorScheme='blueGray'
 								onPress={() => {
-									setChatName(route.params.chatName)
+									setChatName(route.params.chatName);
 									setShowModal(false);
-								}}
-								>
+								}}>
 								Cancel
 							</Button>
 							<Button
 								onPress={() => {
-									handleUpdateName(route.params.chatName, chatName);
+									handleUpdateName(
+										route.params.chatName,
+										chatName
+									);
 								}}>
 								Save
 							</Button>
@@ -125,10 +172,6 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				</Modal.Content>
 			</Modal>
 
-			{/* {auth.currentUser && <Text>{auth.currentUser.displayName}</Text>} */}
-			{/* <TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
-				<Text>Go to ChatList</Text>
-			</TouchableOpacity> */}
 			<GiftedChat
 				messages={messages}
 				showAvatarForEveryMessage={false}
@@ -142,7 +185,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					avatar: 'https://i.pravatar.cc/300',
 				}}
 			/>
-		</>
+		</Box>
 	);
 };
 
