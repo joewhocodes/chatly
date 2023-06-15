@@ -30,7 +30,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	useLayoutEffect(() => {
 		const collectionRef = collection(
 			db,
-			`chats/${route.params.chatName}/messages`
+			`chats/${route.params.chatId}/messages`
 		);
 		const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
@@ -52,7 +52,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			GiftedChat.append(previousMessages, messages)
 		);
 		const { _id, createdAt, text, user } = messages[0];
-		addDoc(collection(db, `chats/${route.params.chatName}/messages`), {
+		addDoc(collection(db, `chats/${route.params.chatId}/messages`), {
 			_id,
 			createdAt,
 			text,
@@ -63,7 +63,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	return (
 		<>
 			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-				{route.params.chatName}
+				{route.params.chatId}
 			</Text>
 			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
 			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
