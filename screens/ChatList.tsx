@@ -29,10 +29,10 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		});
 		const data = {
 			name: newChatName,
-			messages: [],
+			// messages: [],
 		};
 
-		const dbRef = doc(collection(db, 'chats')); // Create a document reference
+		const dbRef = doc(collection(db, 'chats'));
 		setDoc(dbRef, data);
 		console.log('new chat created');
 	};
@@ -72,7 +72,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 								chatName: chat.chatName,
 							});
 						}}
-						key={chat.chatName} // Add a unique key for each chat
+						key={chat.chatName}
 					>
 						<Text>{chat.chatName}</Text>
 					</TouchableOpacity>
