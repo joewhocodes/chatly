@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 
@@ -19,8 +19,7 @@ import {
 	adjectives,
 	animals,
 } from 'unique-names-generator';
-import { VStack, Center, Heading, Button, Flex } from 'native-base';
-
+import { VStack, Center, Heading, Button, Flex, Box, Text, Image, Divider } from 'native-base';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
@@ -70,42 +69,65 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	}, []);
 
 	return (
-		<>
-			{auth.currentUser && (
-				<Text>Welcome {auth.currentUser.displayName}!</Text>
-			)}
-			<Flex flexDirection={'row'} justifyContent={'space-between'}>
-				<Heading ml={'30px'} color={'secondary.500'}>Chatrooms</Heading>
-				<Button mr={'20px'} alignSelf={'end'}>+</Button>
-			</Flex>
-			{!!chats.length &&
-				chats.map(chat => (
-					<VStack space={4} alignItems="center" key={chat.chatId}>
-						<Center w="64" h="20" bg="indigo.700" rounded="md" shadow={3} >
-						  <TouchableOpacity
-							onPress={() => {
-							  navigation.navigate('Chat', {
-								chatId: chat.chatId,
-								chatName: chat.chatName,
-							  });
-							}}
-						  >
-							<Text>
-							  {chat.chatName}
-							  <TouchableOpacity onPress={() => handleDeleteChat(chat.chatId)}>
-								<Text>X</Text>
-							  </TouchableOpacity>
-							</Text>
-						  </TouchableOpacity>
-						</Center>
-				  </VStack>
-				))}
-			<TouchableOpacity onPress={handleCreateNewChat}>
-				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-					Create new chat
-				</Text>
-			</TouchableOpacity>
-		</>
+		<Box>
+			<Box backgroundColor={'primary.500'}>
+				<Center mt={'20px'}>
+					<Image source={require('../assets/logo.png')} />
+				</Center>
+				{auth.currentUser && (
+					<Heading color={'white'} ml={'20px'}>
+						Hey {auth.currentUser.displayName}!
+					</Heading>
+				)}
+				<Center mt={'20px'} pb={'20px'}>
+					<Image source={require('../assets/dots.png')} />
+				</Center>
+			</Box>
+			<Box backgroundColor={'secondary.500'}>
+				<Flex flexDirection={'row'} justifyContent={'space-between'}>
+					<Heading ml={'30px'} color={'secondary.500'}>
+						Chatrooms
+					</Heading>
+					<Button mr={'20px'} alignSelf={'end'}>
+						+
+					</Button>
+				</Flex>
+				{!!chats.length &&
+					chats.map(chat => (
+						<VStack space={4} alignItems='center' key={chat.chatId}>
+							<Center
+								w='64'
+								h='20'
+								bg='indigo.700'
+								rounded='md'
+								shadow={3}>
+								<TouchableOpacity
+									onPress={() => {
+										navigation.navigate('Chat', {
+											chatId: chat.chatId,
+											chatName: chat.chatName,
+										});
+									}}>
+									<Text>
+										{chat.chatName}
+										<TouchableOpacity
+											onPress={() =>
+												handleDeleteChat(chat.chatId)
+											}>
+											<Text>X</Text>
+										</TouchableOpacity>
+									</Text>
+								</TouchableOpacity>
+							</Center>
+						</VStack>
+					))}
+				<TouchableOpacity onPress={handleCreateNewChat}>
+					<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+						Create new chat
+					</Text>
+				</TouchableOpacity>
+			</Box>
+		</Box>
 	);
 };
 

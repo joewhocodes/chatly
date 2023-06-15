@@ -1,6 +1,5 @@
 export const config = {
 	colors: {
-		// Add new color
 		primary: {
 			50: '#39a3ff',
 			100: '#1190ff',

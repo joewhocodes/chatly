@@ -22,10 +22,11 @@ import {
 import { AvatarGenerator } from 'random-avatar-generator';
 import { SSRProvider } from '@react-aria/ssr';
 
-import { config } from './theme'
+import { config } from './theme';
 
 // extend the theme
-export const theme = extendTheme({ config });
+const theme = extendTheme(config);
+
 type MyThemeType = typeof theme;
 declare module 'native-base' {
 	interface ICustomTheme extends MyThemeType {}
