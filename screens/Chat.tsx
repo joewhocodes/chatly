@@ -1,8 +1,4 @@
-import React, {
-	useState,
-	useLayoutEffect,
-	useCallback,
-} from 'react';
+import React, { useState, useLayoutEffect, useCallback } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
@@ -62,9 +58,11 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	return (
 		<>
-			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-				{route.params.chatId}
-			</Text>
+			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
+				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+					{route.params.chatName}
+				</Text>
+			</TouchableOpacity>
 			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
 			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
 				<Text>Go to ChatList</Text>
