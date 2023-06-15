@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 import {
@@ -18,6 +18,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [newChatName, setNewChatName] = useState<string>('');
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined =
@@ -62,8 +63,12 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		console.log(oldName);
 		console.log(newName);
 		setShowModal(false);
-	  };
+	};
 
+	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
+		setNewChatName(e.nativeEvent.text);
+	};
+	
 	return (
 		<>
 			<TouchableOpacity onPress={() => setShowModal(true)}>
@@ -78,9 +83,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					<Modal.CloseButton />
 					<Modal.Header>Change Chat Name</Modal.Header>
 					<Modal.Body>
-						<FormControl mb='3'>
-							<FormControl.Label>Email</FormControl.Label>
-							<Input />
+						<FormControl mb='3' mt='3'>
+							<Input value={newChatName} onChange={onChange} />
 						</FormControl>
 					</Modal.Body>
 					<Modal.Footer>
@@ -90,12 +94,13 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								colorScheme='blueGray'
 								onPress={() => {
 									setShowModal(false);
-								}}>
+								}}
+								>
 								Cancel
 							</Button>
 							<Button
 								onPress={() => {
-									handleUpdateName((e => e.target.value), route.params.chatName);
+									handleUpdateName(route.params.chatName, newChatName);
 								}}>
 								Save
 							</Button>
