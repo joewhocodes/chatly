@@ -11,11 +11,13 @@ import {
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Button, FormControl, Input, Modal } from 'native-base';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
+	const [showModal, setShowModal] = useState<boolean>(false);
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 
 	const currentUserName: string | undefined =
@@ -58,15 +60,48 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	return (
 		<>
-			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
+			<TouchableOpacity onPress={() => setShowModal(true)}>
 				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
 					{route.params.chatName}
 				</Text>
+				<Text>Tap to change name</Text>
 			</TouchableOpacity>
-			{auth.currentUser && <Text>{auth.currentUser.displayName}</Text>}
-			<TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
+
+			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+				<Modal.Content maxWidth='400px'>
+					<Modal.CloseButton />
+					<Modal.Header>Change Chat Name</Modal.Header>
+					<Modal.Body>
+						<FormControl mb='3'>
+							{/* <FormControl.Label>Email</FormControl.Label> */}
+							<Input />
+						</FormControl>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button.Group space={2}>
+							<Button
+								variant='ghost'
+								colorScheme='blueGray'
+								onPress={() => {
+									setShowModal(false);
+								}}>
+								Cancel
+							</Button>
+							<Button
+								onPress={() => {
+									setShowModal(false);
+								}}>
+								Save
+							</Button>
+						</Button.Group>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+
+			{/* {auth.currentUser && <Text>{auth.currentUser.displayName}</Text>} */}
+			{/* <TouchableOpacity onPress={() => navigation.navigate('ChatList')}>
 				<Text>Go to ChatList</Text>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 			<GiftedChat
 				messages={messages}
 				showAvatarForEveryMessage={false}
