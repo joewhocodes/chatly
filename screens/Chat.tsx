@@ -103,7 +103,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	};
 
 	return (
-		<Box h='100%' backgroundColor='secondary.500'>
+		<Box h='100%' backgroundColor='white'>
 			<Box backgroundColor={'primary.500'}>
 				<Box mt={'20px'}>
 					<Flex direction='row' justifyContent={'space-between'}>
