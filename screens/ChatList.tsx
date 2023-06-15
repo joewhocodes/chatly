@@ -1,24 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { auth, db } from '../firebase/firebase';
-
-import {
-	collection,
-	deleteDoc,
-	doc,
-	onSnapshot,
-	orderBy,
-	query,
-	setDoc,
-	serverTimestamp,
-} from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
-import {
-	uniqueNamesGenerator,
-	adjectives,
-	animals,
-} from 'unique-names-generator';
 import {
 	VStack,
 	Center,
@@ -30,26 +13,31 @@ import {
 	Image,
 	ScrollView,
 } from 'native-base';
-import { onAuthStateChanged } from 'firebase/auth';
+
+import {
+	collection,
+	deleteDoc,
+	doc,
+	onSnapshot,
+	orderBy,
+	query,
+	setDoc,
+	serverTimestamp,
+} from 'firebase/firestore';
+import { auth, db } from '../firebase/firebase';
+
+import {
+	uniqueNamesGenerator,
+	adjectives,
+	animals,
+} from 'unique-names-generator';
+
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
 		[]
 	);
-	const [user, setUser] = useState(auth.currentUser);
-
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, user => {
-			if (user) {
-				setUser(user);
-			} else {
-				setUser(null);
-			}
-		});
-
-		return () => unsubscribe();
-	}, []);
 
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
@@ -64,7 +52,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	const handleDeleteChat = (chatId: string) => {
 		console.log(chatId);
-		const docRef = doc(db, 'chats', chatId); // Update the document reference path
+		const docRef = doc(db, 'chats', chatId);
 		deleteDoc(docRef)
 			.then(() => {
 				console.log('Entire Document has been deleted successfully.');
@@ -93,37 +81,21 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
-			<Box backgroundColor={'primary.500'}>
+			<Box backgroundColor={'primary.500'} pb={'22px'}>
 				<Center mt={'20px'}>
 					<Image
 						source={require('../assets/logo.png')}
 						alt={'logo'}
 					/>
 				</Center>
-				{user && (
-					<>
-						<Image
-							source={
-								user.photoURL
-									? { uri: user.photoURL }
-									: require('../assets/favicon.png')
-							}
-							alt={'user avatar'}
-						/>
-						<Heading
-							color={'white'}
-							ml={'20px'}
-							fontFamily={'Jua-Regular'}>
-							Hey {user.displayName}!!
-						</Heading>
-					</>
-				)}
-				<Center mt={'20px'} pb={'20px'}>
-					<Image
-						source={require('../assets/dots.png')}
-						alt={'dots'}
-					/>
-				</Center>
+				<Heading
+					color={'white'}
+					textAlign={'center'}
+					mt={'5px'}
+					fontFamily={'Jua-Regular'}>
+					Welcome to Chatly!
+				</Heading>
+
 			</Box>
 			<ScrollView>
 				<Box>
@@ -171,7 +143,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 												chatName: chat.chatName,
 											});
 										}}>
-										<Text>{chat.chatName}</Text>
+										<Text fontFamily={'Jua-Regular'}>{chat.chatName}</Text>
 									</TouchableOpacity>
 								</Center>
 							))}
