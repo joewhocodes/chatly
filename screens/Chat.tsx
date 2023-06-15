@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
@@ -6,10 +6,12 @@ import {
 	collection,
 	doc,
 	addDoc,
+	getDoc,
 	orderBy,
 	query,
 	onSnapshot,
 	setDoc,
+	updateDoc,
 } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
@@ -23,15 +25,43 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const currentUserName: string | undefined = currentUser?.displayName || 'Unknown User';
 	const currentAvatar: string | undefined = currentUser?.photoURL || 'Unknown photo';
 	
-	// const { itemId } = route.params;
-	// console.log(itemId);
-	
 	useLayoutEffect(() => {
-		const collectionRef = collection(db, 'chats');
+		// const docSnap = await getDoc(docRef);
+		
+		// const q = query(collectionRef, orderBy('createdAt', 'desc'));
+		
+		const docRef = doc(db, 'chats', route.params.chatName);
+		// console.log(`docRef: ${docRef}`)
+		const chatLog = onSnapshot(docRef, docsSnap => {
+			// const doc = getDoc(docRef)
+			// console.log(docsSnap.data)
+			const messagesArray: { chatName: string }[] = [];
+			// docsSnap.forEach(doc => {
+			// 	const chat = {
+			// 		chatName: doc.id,
+			// 	};
+			// 	messagesArray.push(chat);
+			// });
+			// setChats(messagesArray);
+
+			
+			// setMessages(
+			// 	querySnapshot.docs.map(doc => ({
+			// 		_id: doc.data()._id,
+			// 		createdAt: doc.data().createdAt.toDate(),
+			// 		text: doc.data().text,
+			// 		user: doc.data().user,
+			// 	}))
+			// );
+		});
+		return chatLog;
+	}, []);
+
+	useLayoutEffect(() => {
+		const collectionRef = collection(db, `chats/${route.params.chatName}/messages`);
 		const q = query(collectionRef, orderBy('createdAt', 'desc'));
 		
 		const unsubscribe = onSnapshot(q, querySnapshot => {
-			console.log('querySnapshot unsubscribe');
 			setMessages(
 				querySnapshot.docs.map(doc => ({
 					_id: doc.data()._id,
@@ -40,22 +70,31 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					user: doc.data().user,
 				}))
 			);
+			
 		});
 		return unsubscribe;
 	}, []);
-	
-// const snapshot = await citiesRef.get();
-// snapshot.forEach(doc => {
-//   console.log(doc.id, '=>', doc.data());
-// });
 
+	useLayoutEffect(() => {
+		handleGetData()
+	})
+
+	const handleGetData = async () => {
+		try {
+			const docRef = doc(db, 'chats', route.params.chatName);
+			const docSnap = await getDoc(docRef);
+			console.log(docSnap.data());
+		} catch(error) {
+			console.log(error)
+		}
+	};
+	
 	const onSend = useCallback((messages: IMessage[]) => {
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
 		);
 		const { _id, createdAt, text, user } = messages[0];
-		// console.log(doc(collection(db, 'newChats'), 'colorful_prawn'))
-		addDoc(collection(db, 'chats'), {
+		addDoc(collection(db, `chats/${route.params.chatName}/messages`), {
 			_id,
 			createdAt,
 			text,
@@ -63,8 +102,6 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 	}, []);
 
-	// console.log(doc(collection(db, 'newChats'), 'colorful_prawn'))
-	
 	return (
 		<>
 			<Text style={{ fontWeight: 'bold', fontSize: 18 }}>{route.params.chatName}</Text>
