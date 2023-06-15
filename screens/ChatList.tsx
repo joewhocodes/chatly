@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState, useRef } from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
@@ -41,44 +41,69 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
 		[]
 	);
+	const [isSwiping, setIsSwiping] = useState(false);
 
-	const SwipeableItem = ({ item, onDelete }) => {
-		const renderRightActions = (progress, dragX) => {
-		  const onDeletePress = () => {
-			onDelete(item.chatId);
-		  };
-	  
-		  const trans = dragX.interpolate({
-			inputRange: [-100, 0],
-			outputRange: [1, 0],
-			extrapolate: 'clamp',
-		  });
-	  
-		  return (
-			<TouchableOpacity onPress={onDeletePress}>
-			  <Animated.View
-				style={{
-				  backgroundColor: 'red',
-				  justifyContent: 'center',
-				  alignItems: 'flex-end',
-				  padding: 10,
-				  opacity: trans,
-				}}
-			  >
-				<Text style={{ color: 'white' }}>Delete</Text>
-			  </Animated.View>
-			</TouchableOpacity>
-		  );
+	const SwipeableItem = ({ item, onDelete, onPress }) => {
+		const swipeableRef = useRef(null);
+
+		const handleSwipeStart = () => {
+			setIsSwiping(true); 
 		};
-	  
+
+		const handleSwipeRelease = () => {
+			setIsSwiping(false);
+		};
+
+		const handlePress = () => {
+			if (!isSwiping) {
+				onPress();
+			}
+		};
+
+		const renderLeftActions = (progress, dragX) => {
+			const onDeletePress = () => {
+				onDelete(item.chatId);
+			};
+
+			const trans = dragX.interpolate({
+				inputRange: [0, 100],
+				outputRange: [0, 1],
+				extrapolate: 'clamp',
+			  });
+
+			return (
+				<TouchableOpacity onPress={onDeletePress}>
+					<Animated.View
+						style={{
+							backgroundColor: 'red',
+							justifyContent: 'center',
+							alignItems: 'flex-end',
+							padding: 20,
+							opacity: trans,
+						}}>
+						<Text style={{ color: 'white' }}>Delete</Text>
+					</Animated.View>
+				</TouchableOpacity>
+			);
+		};
+
 		return (
-		  <Swipeable renderRightActions={renderRightActions}>
-			<View style={{ backgroundColor: 'white', padding: 20 }}>
-			  <Text>{item.chatName}</Text>
-			</View>
-		  </Swipeable>
+			<Swipeable
+				ref={swipeableRef}
+				renderLeftActions={renderLeftActions}
+				onSwipeableWillOpen={handleSwipeStart}
+				onSwipeableWillClose={handleSwipeRelease}
+				onSwipeableWillTransition={handleSwipeRelease} // Add this event handler
+			>
+				<TouchableOpacity
+					activeOpacity={1}
+					onPress={handlePress}
+					style={{ backgroundColor: 'white', padding: 20 }}>
+					<Text>{item.chatName}</Text>
+				</TouchableOpacity>
+			</Swipeable>
 		);
-	  };
+	};
 
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
@@ -100,6 +125,13 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			.catch(error => {
 				console.log(error);
 			});
+	};
+
+	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
+		navigation.navigate('Chat', {
+			chatId: chat.chatId,
+			chatName: chat.chatName,
+		});
 	};
 
 	useLayoutEffect(() => {
@@ -135,7 +167,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					fontFamily={'Jua-Regular'}>
 					Welcome to Chatly!
 				</Heading>
-
 			</Box>
 			<ScrollView>
 				<Box>
@@ -169,26 +200,20 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					<VStack space={5} alignItems='center'>
 						{!!chats.length &&
 							chats.map(chat => (
-								
-								<SwipeableItem key={chat.chatId} item={chat} onDelete={() => handleDeleteChat(chat.chatId)}>
-								<Center
+								<Box
 									w='90%'
-									h='20'
 									bg='white'
 									rounded='md'
 									shadow={7}
 									key={chat.chatId}>
-									<TouchableOpacity
-										onPress={() => {
-											navigation.navigate('Chat', {
-												chatId: chat.chatId,
-												chatName: chat.chatName,
-											});
-										}}>
-										<Text fontFamily={'Jua-Regular'}>{chat.chatName}</Text>
-									</TouchableOpacity>
-								</Center>
-								</SwipeableItem>
+									<SwipeableItem
+										item={chat}
+										onDelete={() =>
+											handleDeleteChat(chat.chatId)
+										}
+										onPress={() => handleItemPress(chat)}
+									/>
+								</Box>
 							))}
 					</VStack>
 				</Box>
