@@ -3,7 +3,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { auth, db } from '../firebase/firebase';
 
-import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import {
 	uniqueNamesGenerator,
@@ -28,6 +28,19 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const dbRef = doc(collection(db, 'chats'));
 		setDoc(dbRef, { name: newChatName });
 	};
+
+	const handleDeleteChat = (chatId: string) => {
+		console.log(chatId);
+		const docRef = doc(db, 'chats', chatId); // Update the document reference path
+		deleteDoc(docRef)
+		  .then(() => {
+			console.log('Entire Document has been deleted successfully.');
+		  })
+		  .catch((error) => {
+			console.log(error);
+		  });
+		console.log('test');
+	  };
 
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
@@ -60,7 +73,12 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 							});
 						}}
 						key={chat.chatId}>
-						<Text>{chat.chatName}</Text>
+						<Text>
+							{chat.chatName}
+							<TouchableOpacity onPress={() => handleDeleteChat(chat.chatId)}>
+								<Text>X</Text>
+							</TouchableOpacity>
+						</Text>
 					</TouchableOpacity>
 				))}
 			<TouchableOpacity onPress={handleCreateNewChat}>
