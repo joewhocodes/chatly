@@ -22,11 +22,7 @@ import {
 import { AvatarGenerator } from 'random-avatar-generator';
 import { SSRProvider } from '@react-aria/ssr';
 
-// Define the config
-const config = {
-	useSystemColorMode: false,
-	initialColorMode: 'dark',
-};
+import { config } from './theme'
 
 // extend the theme
 export const theme = extendTheme({ config });
@@ -36,7 +32,6 @@ declare module 'native-base' {
 }
 
 export default function App() {
-
 	const generator = new AvatarGenerator();
 
 	useEffect(() => {
@@ -62,11 +57,9 @@ export default function App() {
 			});
 	}, []);
 
-	
-
 	return (
 		<SSRProvider>
-			<NativeBaseProvider>
+			<NativeBaseProvider theme={theme}>
 				<Navigation />
 			</NativeBaseProvider>
 		</SSRProvider>

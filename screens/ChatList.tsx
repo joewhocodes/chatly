@@ -19,6 +19,7 @@ import {
 	adjectives,
 	animals,
 } from 'unique-names-generator';
+import { VStack, Center, Heading, Button, Flex } from 'native-base';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
@@ -73,24 +74,31 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			{auth.currentUser && (
 				<Text>Welcome {auth.currentUser.displayName}!</Text>
 			)}
+			<Flex flexDirection={'row'} justifyContent={'space-between'}>
+				<Heading ml={'30px'} color={'secondary.500'}>Chatrooms</Heading>
+				<Button mr={'20px'} alignSelf={'end'}>+</Button>
+			</Flex>
 			{!!chats.length &&
 				chats.map(chat => (
-					<TouchableOpacity
-						onPress={() => {
-							navigation.navigate('Chat', {
+					<VStack space={4} alignItems="center" key={chat.chatId}>
+						<Center w="64" h="20" bg="indigo.700" rounded="md" shadow={3} >
+						  <TouchableOpacity
+							onPress={() => {
+							  navigation.navigate('Chat', {
 								chatId: chat.chatId,
 								chatName: chat.chatName,
-							});
-						}}
-						key={chat.chatId}>
-						<Text>
-							{chat.chatName}
-							<TouchableOpacity
-								onPress={() => handleDeleteChat(chat.chatId)}>
+							  });
+							}}
+						  >
+							<Text>
+							  {chat.chatName}
+							  <TouchableOpacity onPress={() => handleDeleteChat(chat.chatId)}>
 								<Text>X</Text>
-							</TouchableOpacity>
-						</Text>
-					</TouchableOpacity>
+							  </TouchableOpacity>
+							</Text>
+						  </TouchableOpacity>
+						</Center>
+				  </VStack>
 				))}
 			<TouchableOpacity onPress={handleCreateNewChat}>
 				<Text style={{ fontWeight: 'bold', fontSize: 18 }}>
