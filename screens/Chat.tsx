@@ -8,7 +8,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
-import { chatsState } from '../atoms';
+import { chatsState } from '../atoms/atoms';
 import { useRecoilState } from 'recoil';
 
 

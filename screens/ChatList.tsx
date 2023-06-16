@@ -4,7 +4,7 @@ import { VStack, Center, Heading, Button, Flex, Box, Text, Image, ScrollView } f
 import { Swipeable } from 'react-native-gesture-handler';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { useRecoilState } from 'recoil';
-import { chatsState } from '../atoms';
+import { chatsState } from '../atoms/atoms';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
 

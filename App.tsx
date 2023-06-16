@@ -19,12 +19,6 @@ export default function App() {
 		'Jua-Regular': require('./assets/fonts/Jua-Regular.ttf'),
 	});
 
-	async function getImg() {
-		const response = await fetch('https://loremflickr.com/json/320/240');
-		const jsonData = await response.json();
-		return jsonData.file;
-	}
-
 	if (!fontsLoaded) {
 		return null;
 	}
