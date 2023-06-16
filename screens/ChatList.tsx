@@ -63,6 +63,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const renderLeftActions = (progress, dragX) => {
 			const onDeletePress = () => {
 				onDelete(item.chatId);
+				setIsSwiping(false);
 			};
 
 			const trans = dragX.interpolate({
