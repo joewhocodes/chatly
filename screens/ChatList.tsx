@@ -14,7 +14,6 @@ type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation }: ChatListScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
-	const [isSwiping, setIsSwiping] = useState(false);
 
 	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({

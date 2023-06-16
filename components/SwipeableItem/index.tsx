@@ -4,15 +4,7 @@ import { TouchableOpacity, Animated } from 'react-native';
 import { Text } from 'native-base';
 import { Swipeable } from 'react-native-gesture-handler';
 
-type SwipeableItemProps = {
-  item: {
-    name: string;
-    id: string;
-    messages: any[];
-  };
-  onDelete: (id: string) => void;
-  onPress: () => void;
-};
+import { SwipeableItemProps } from './types';
 
 const SwipeableItem: React.FC<SwipeableItemProps> = ({
   item,
