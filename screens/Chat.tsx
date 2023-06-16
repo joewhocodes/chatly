@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
 import { TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
-import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex, View} from 'native-base';
+import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex } from 'native-base';
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
@@ -8,7 +8,7 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
-import {chatsState} from '../atoms';
+import { chatsState } from '../atoms';
 import { useRecoilState } from 'recoil';
 
 
@@ -32,57 +32,52 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		}
 	}, []);
 
-	const onSend = useCallback((messages: IMessage[]) => {
-		const updatedChatData = chatData.map(chat => {
-			if (chat.name === route.params.name) {
-				const updatedMessages = [
-					...chat.messages,
-					...messages.map(message => ({
-						id: message._id.toString(),
-						createdAt: message.createdAt.toString(),
-						text: message.text,
-						user: {
-							id_: message.user._id.toString(),
-							avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg'
-						},
-					})),
-				];
-				return { ...chat, messages: updatedMessages };
+	const onSend = useCallback(
+		(messages: IMessage[]) => {
+			const updatedChatData = chatData.map(chat => {
+				if (chat.name === route.params.name) {
+					const updatedMessages = [
+						...chat.messages,
+						...messages.map(message => ({
+							id: message._id.toString(),
+							createdAt: message.createdAt.toString(),
+							text: message.text,
+							user: {
+								id_: message.user._id.toString(),
+								avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
+							},
+						})),
+					];
+					return { ...chat, messages: updatedMessages };
+				}
+				return chat;
+			});
+
+			setChatData(updatedChatData);
+			setMessages(previousMessages =>
+				GiftedChat.append(previousMessages, messages)
+			);
+		},
+		[chatData, route.params.name, setChatData]
+	);
+
+	const handleUpdateName = (oldName: string, newName: string) => {
+		let newChatData = chatData.map(chat => {
+			if (chat.name === oldName) {
+				return {
+					...chat,
+					name: newName,
+				};
 			}
 			return chat;
 		});
-
-		setChatData(updatedChatData);
-		setMessages(previousMessages =>
-			GiftedChat.append(previousMessages, messages)
-		);
-
-		const { _id, createdAt, text, user } = messages[0];
-		const newMessage: IMessage = {
-			_id,
-			createdAt,
-			text,
-			user,
-		};
-	}, [chatData, route.params.name, setChatData]);
-
-	const handleUpdateName = (oldName: string, newName: string) => {
-		let newChatData = chatData.map((chat) => {
-			if (chat.name === oldName) {
-			  return {
-				...chat,
-				name: newName,
-			  };
-			}
-			return chat;
-		  })
-		setChatData(newChatData)
+		setChatData(newChatData);
 		setShowModal(false);
-	  };
+	};
 
 	const handleOnChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setChatName(e.nativeEvent.text);
-	  };
+	};
 
 	return (
 		<Box h='100%' backgroundColor='white'>

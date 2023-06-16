@@ -10,7 +10,7 @@ import { StackNavigator } from '../components/Navigation/Types';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
-const ChatList = ({ navigation, route }: ChatListScreenProps) => {
+const ChatList = ({ navigation }: ChatListScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [isSwiping, setIsSwiping] = useState(false);
 
@@ -80,7 +80,9 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					activeOpacity={1}
 					onPress={handlePress}
 					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text fontFamily={'Jua-Regular'} textAlign={'center'}>{item.name}</Text>
+					<Text fontFamily={'Jua-Regular'} textAlign={'center'}>
+						{item.name}
+					</Text>
 				</TouchableOpacity>
 			</Swipeable>
 		);
@@ -129,8 +131,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			name: chat.name,
 		});
 	};
-
-	console.log();
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
