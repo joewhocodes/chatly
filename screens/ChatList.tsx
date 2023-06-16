@@ -37,7 +37,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState)
 	const [isSwiping, setIsSwiping] = useState(false);
 
-	const SwipeableItem = ({ item, onDelete, onPress }: SwappableItemParams) => {
+	const SwipeableItem = ({ item, onDelete, onPress }: { item: any, onDelete: Function, onPress: Function }) => {
 		const swipeableRef = useRef(null);
 
 		const handleSwipeStart = () => {
