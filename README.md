@@ -1,9 +1,10 @@
-# NativeBase TypeScript Expo Template
+# Chatly
 
-The official NativeBase TypeScript template for [Expo](https://docs.expo.io/)
+Connect to random users and chat!
 
 ## Usage
 
 ```sh
-expo init my-app --template @native-base/expo-template-typescript
+npm install
+npm run start
 ```
