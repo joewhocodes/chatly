@@ -1,20 +1,15 @@
-import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
+import React, {
+	useState,
+	useLayoutEffect,
+	useCallback,
+	useEffect,
+} from 'react';
 import {
 	TouchableOpacity,
 	TextInputChangeEventData,
 	NativeSyntheticEvent,
 } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { auth, db } from '../firebase/firebase';
-import {
-	collection,
-	addDoc,
-	doc,
-	updateDoc,
-	orderBy,
-	query,
-	onSnapshot,
-} from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import {
@@ -37,48 +32,42 @@ type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [chatName, setChatName] = useState<string>('Expected Camel');
-	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
-	const [newMessages, setNewMessages] = useState();
+	const [chatName, setChatName] = useState<string>(route.params.name);
 
-	const currentUserName: string | undefined =
-		currentUser?.displayName || 'Unknown User';
-		const currentAvatar: string | undefined =
-		currentUser?.photoURL || undefined; // Assign undefined instead of 'Unknown photo'
-	
-		useLayoutEffect(() => {
-			const findChat = myChatData.find(chat => chat.name === 'Expected Camel')?.messages;
-			if (findChat) {
-			  const messages: IMessage[] = findChat.map(doc => ({
+	useLayoutEffect(() => {
+		const findChat = myChatData.find(
+			chat => chat.name === 'Expected Camel'
+		)?.messages;
+		if (findChat) {
+			const messages: IMessage[] = findChat.map(doc => ({
 				_id: doc.id,
 				text: doc.text,
 				user: { _id: doc.user.id_, avatar: doc.user.avatar },
 				createdAt: new Date(doc.createdAt),
-			  }));
-			  setMessages(messages.reverse());
-			}
-		  }, []);
+			}));
+			setMessages(messages.reverse());
+		}
+		setChatName
+	}, []);
 
-		  const onSend = useCallback((messages: IMessage[]) => {
-			setMessages(previousMessages =>
-			  GiftedChat.append(previousMessages, messages)
-			);
-		  
-			const { _id, createdAt, text, user } = messages[0];
-			const newMessage: IMessage = {
-			  _id,
-			  createdAt,
-			  text,
-			  user,
-			};
-		  
-			// Update the logic to add the new message to the database or perform any necessary actions
-			// For now, let's just log the new message
-			console.log('New message:', newMessage);
-		  }, []);
+	const onSend = useCallback((messages: IMessage[]) => {
+		setMessages(previousMessages =>
+			GiftedChat.append(previousMessages, messages)
+		);
+
+		const { _id, createdAt, text, user } = messages[0];
+		const newMessage: IMessage = {
+			_id,
+			createdAt,
+			text,
+			user,
+		};
+		// Update the logic to add the new message
+		console.log('New message:', newMessage);
+	}, []);
 
 	const handleUpdateName = (oldName: string, newName: string) => {
-		setChatName(newName)
+		setChatName(newName);
 		setShowModal(false);
 	};
 
@@ -96,14 +85,14 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						<Box>
 							<TouchableOpacity
 								onPress={() => navigation.navigate('ChatList')}>
-							<Image 
-								source={require('../assets/back-arrow.png')}
-								alt={'back arrow'}
-								mt='7px'
-							/>
+								<Image
+									source={require('../assets/back-arrow.png')}
+									alt={'back arrow'}
+									mt='7px'
+								/>
 							</TouchableOpacity>
 						</Box>
-						<Image 
+						<Image
 							source={require('../assets/logo.png')}
 							alt={'logo'}
 							mr={'45px'}
@@ -166,8 +155,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					backgroundColor: '#fff',
 				}}
 				user={{
-					_id: currentUserName,
-					avatar: currentAvatar,
+					_id: 'boby',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				}}
 			/>
 		</Box>

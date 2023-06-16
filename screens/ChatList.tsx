@@ -185,7 +185,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 									<SwipeableItem
 										item={chat} 
 										onDelete={() =>
-											handleDeleteChat(chat.chatId)
+											handleDeleteChat(chat.Id)
 										}
 										onPress={() => handleItemPress(chat)}
 									/>
