@@ -22,6 +22,7 @@ import {
 	Modal,
 	Text,
 	Flex,
+	View,
 } from 'native-base';
 
 import {chatsState} from '../atoms';
@@ -85,7 +86,17 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		console.log('New message:', newMessage);
 	}, [chatData, route.params.name, setChatData]);
 
-
+	const customSystemMessage = props => {
+		return (
+		  <View>
+			{/* <Icon name="lock" color="#9d9d9d" size={16} /> */}
+			<Text>
+			  Your chat is secured. Remember to be cautious about what you share
+			  with others.
+			</Text>
+		  </View>
+		);
+	  };
 
 	const handleUpdateName = (oldName: string, newName: string) => {
 		let newChatData = chatData.map((chat) => {
