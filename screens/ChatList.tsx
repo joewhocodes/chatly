@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
@@ -15,17 +15,6 @@ import {
 } from 'native-base';
 
 import { Swipeable } from 'react-native-gesture-handler';
-
-import {
-	collection,
-	deleteDoc,
-	doc,
-	onSnapshot,
-	orderBy,
-	query,
-	serverTimestamp,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase/firebase';
 
 import {
 	uniqueNamesGenerator,
@@ -113,12 +102,11 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	  
 		const newChat = {
 		  name: newChatName,
-		  createdAt: serverTimestamp(),
 		  id: 'wefwvsa',
 		};
 
 		chatData.push(newChat)
-	  
+	    
 		try {
 			navigation.navigate('Chat', {
 			  id: newChat.id,
@@ -130,18 +118,10 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	  };
 	  
 
-	const handleDeleteChat = (chatId: string) => {
-		const docRef = doc(db, 'chats', chatId);
-		deleteDoc(docRef)
-			.then(() => {
-				console.log('Entire Document has been deleted successfully.');
-			})
-			.catch(error => {
-				console.log(error);
-			});
+	const handleDeleteChat = (id: string) => {
 	};
 
-	const handleItemPress = (chat: { id: any; name: any }) => {
+	const handleItemPress = (chat: { id: string; name: string }) => {
 		navigation.navigate('Chat', {
 			id: chat.id,
 			name: chat.name,

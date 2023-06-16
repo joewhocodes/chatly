@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 import {
 	TouchableOpacity,
 	TextInputChangeEventData,
@@ -30,47 +30,41 @@ import {
 	Flex,
 } from 'native-base';
 
+import myChatData from '../data/chats';
+
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [chatName, setChatName] = useState<string>(route.params.chatName);
+	const [chatName, setChatName] = useState<string>('Expected Camel');
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
 	const [newMessages, setNewMessages] = useState();
 
-	console.log(route.params)
 	const currentUserName: string | undefined =
 		currentUser?.displayName || 'Unknown User';
 		const currentAvatar: string | undefined =
 		currentUser?.photoURL || undefined; // Assign undefined instead of 'Unknown photo'
 	
+		useLayoutEffect(() => {
+			const findChat = myChatData.find(chat => chat.name === 'Expected Camel')?.messages;
+			if (findChat) {
+			  const messages: IMessage[] = findChat.map(doc => ({
+				_id: doc.id,
+				text: doc.text,
+				user: { _id: doc.user.id_, avatar: doc.user.avatar }, // Update _id property
+				createdAt: new Date(doc.createdAt),
+			  }));
+			  setMessages(messages.reverse());
+			}
+		  }, []);
 
-	useLayoutEffect(() => {
-		const collectionRef = collection(
-			db,
-			`chats/${route.params.chatId}/messages`
-		);
-		const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
-		const unsubscribe = onSnapshot(q, querySnapshot => {
-			setMessages(
-				querySnapshot.docs.map(doc => ({
-					_id: doc.data()._id,
-					createdAt: doc.data().createdAt.toDate(),
-					text: doc.data().text,
-					user: doc.data().user,
-				}))
-			);
-		});
-		return unsubscribe;
-	}, []);
 	const onSend = useCallback((messages: IMessage[]) => {
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
 		);
 		const { _id, createdAt, text, user } = messages[0];
-		addDoc(collection(db, `chats/${route.params.chatId}/messages`), {
+		addDoc(collection(db, `chats/${route.params.id}/messages`), {
 			_id,
 			createdAt,
 			text,
@@ -154,7 +148,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								variant='ghost'
 								colorScheme='blueGray'
 								onPress={() => {
-									setChatName(route.params.chatName);
+									setChatName(route.params.name);
 									setShowModal(false);
 								}}>
 								Cancel
@@ -162,7 +156,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							<Button
 								onPress={() => {
 									handleUpdateName(
-										route.params.chatName,
+										route.params.name,
 										chatName
 									);
 								}}>
