@@ -8,85 +8,13 @@ import { chatsState } from '../atoms';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
 
+import SwipeableItem from '../components/SwipeableItem';
+
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation }: ChatListScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [isSwiping, setIsSwiping] = useState(false);
-
-	const SwipeableItem = ({
-		item,
-		onDelete,
-		onPress,
-	}: {
-		item: any;
-		onDelete: Function;
-		onPress: Function;
-	}) => {
-		const swipeableRef = useRef(null);
-
-		const handleSwipeStart = () => {
-			setIsSwiping(true);
-		};
-
-		const handleSwipeRelease = () => {
-			setIsSwiping(false);
-		};
-
-		const handlePress = () => {
-			if (!isSwiping) {
-				onPress();
-			}
-		};
-
-		const renderLeftActions = (
-			progress: Animated.AnimatedInterpolation<number>,
-			dragX: Animated.AnimatedInterpolation<number>
-		) => {
-			const onDeletePress = () => {
-				onDelete(item.chatName);
-				setIsSwiping(false);
-			};
-
-			const trans = dragX.interpolate({
-				inputRange: [0, 100],
-				outputRange: [0, 1],
-				extrapolate: 'clamp',
-			});
-
-			return (
-				<TouchableOpacity onPress={onDeletePress}>
-					<Animated.View
-						style={{
-							backgroundColor: 'red',
-							justifyContent: 'center',
-							alignItems: 'flex-end',
-							padding: 20,
-							opacity: trans,
-						}}>
-						<Text style={{ color: 'white' }}>Delete</Text>
-					</Animated.View>
-				</TouchableOpacity>
-			);
-		};
-
-		return (
-			<Swipeable
-				ref={swipeableRef}
-				renderLeftActions={renderLeftActions}
-				onSwipeableWillOpen={handleSwipeStart}
-				onSwipeableWillClose={handleSwipeRelease}>
-				<TouchableOpacity
-					activeOpacity={1}
-					onPress={handlePress}
-					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text fontFamily={'Jua-Regular'} textAlign={'center'}>
-						{item.name}
-					</Text>
-				</TouchableOpacity>
-			</Swipeable>
-		);
-	};
 
 	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({
