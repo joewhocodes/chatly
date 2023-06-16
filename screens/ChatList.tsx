@@ -120,11 +120,15 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	  };
 	  
 
-	const handleDeleteChat = (id: string) => {
+	const handleDeleteChat = (name: string ) => {
+		console.log('chatData:', chatData.map(e => e.name))
+		console.log('name:', name)
+		console.log(chatData.filter(chat => chat.name == name))
+		const filteredChats = chatData.filter(chat => chat.name !== name)
+		setChatData(filteredChats);
 	};
 
 	const handleItemPress = (chat: { id: string; name: string }) => {
-		console.log(chat.name)
 		navigation.navigate('Chat', {
 			id: chat.id,
 			name: chat.name,
@@ -190,7 +194,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 									<SwipeableItem
 										item={chat} 
 										onDelete={() =>
-											handleDeleteChat(chat.Id)
+											handleDeleteChat(chat.name)
 										}
 										onPress={() => handleItemPress(chat)}
 									/>
