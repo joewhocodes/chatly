@@ -36,7 +36,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	useLayoutEffect(() => {
 		const findChat = myChatData.find(
-			chat => chat.name === 'Expected Camel'
+			chat => chat.name === route.params.name
 		)?.messages;
 		if (findChat) {
 			const messages: IMessage[] = findChat.map(doc => ({
@@ -155,7 +155,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					backgroundColor: '#fff',
 				}}
 				user={{
-					_id: 'boby',
+					_id: 'cat_lord',
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				}}
 			/>
