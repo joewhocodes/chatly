@@ -3,7 +3,6 @@ type ChatProps = {
 	name: string;
 };
 
-
 export type StackNavigator = {
 	ChatList: undefined;
 	Chat: ChatProps;

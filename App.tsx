@@ -4,17 +4,6 @@ import {
 	extendTheme,
 } from 'native-base';
 import Navigation from './components/Navigation/index';
-import {
-	updateProfile,
-	signInAnonymously,
-	onAuthStateChanged,
-} from 'firebase/auth';
-import { auth } from './firebase/firebase';
-import {
-	uniqueNamesGenerator,
-	adjectives,
-	animals,
-} from 'unique-names-generator';
 import { SSRProvider } from '@react-aria/ssr';
 import { useFonts } from 'expo-font';
 
@@ -45,31 +34,6 @@ export default function App() {
 		const jsonData = await response.json();
 		return jsonData.file;
 	}
-
-
-	useEffect(() => {
-		signInAnonymously(auth)
-			.then(getImg)
-			.then((res) => {
-				console.log('user created');
-				onAuthStateChanged(auth, user => {
-					if (user) {
-						updateProfile(user, {
-							displayName: uniqueNamesGenerator({
-								dictionaries: [adjectives, animals],
-								length: 2,
-							}),
-							photoURL: res,
-						});
-					}
-				});
-			})
-			.catch(error => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				// ...
-			});
-	}, []);
 
 	if (!fontsLoaded) {
 		return null; // or render a loading indicator
