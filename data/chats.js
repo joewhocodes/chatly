@@ -5,7 +5,7 @@ export default chats = [
 		messages: [
 			{
 				id: '92995bbd-dc80-478d-88erg',
-                createdAt: 'March 14th 2012',
+                createdAt: "2022-03-25 11:12:00",
 				text: 'hi',
 				user: {
 					id_: 'principle_egret',
@@ -14,7 +14,7 @@ export default chats = [
 			},
 			{
 				id: '92995bbd-4e',
-                createdAt: 'March 14th 2012',
+                createdAt: "2022-03-25 11:15:00",
 				text: 'hey',
 				user: {
 					id_: 'principle_egret',
@@ -23,7 +23,7 @@ export default chats = [
 			},
 			{
 				id: '92995bbd-dc8dfghd',
-                createdAt: 'March 14th 2012',
+                createdAt: "2022-03-25 11:18:00",
 				text: 'hiow',
 				user: {
 					id_: 'principle_egret',

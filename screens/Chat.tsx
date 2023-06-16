@@ -52,7 +52,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			  const messages: IMessage[] = findChat.map(doc => ({
 				_id: doc.id,
 				text: doc.text,
-				user: { _id: doc.user.id_, avatar: doc.user.avatar }, // Update _id property
+				user: { _id: doc.user.id_, avatar: doc.user.avatar },
 				createdAt: new Date(doc.createdAt),
 			  }));
 			  setMessages(messages.reverse());
