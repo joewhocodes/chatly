@@ -20,6 +20,11 @@ import { useFonts } from 'expo-font';
 
 import { config } from './theme';
 
+import {
+	RecoilRoot,
+
+  } from 'recoil';
+
 // extend the theme
 const theme = extendTheme(config);
 
@@ -29,7 +34,6 @@ declare module 'native-base' {
 }
 
 export default function App() {
-
 	const [fontsLoaded] = useFonts({
 		'Jua-Regular': require('./assets/fonts/Jua-Regular.ttf'),
 	});
@@ -41,6 +45,7 @@ export default function App() {
 		const jsonData = await response.json();
 		return jsonData.file;
 	}
+
 
 	useEffect(() => {
 		signInAnonymously(auth)
@@ -72,9 +77,11 @@ export default function App() {
 
 	return (
 		<SSRProvider>
-			<NativeBaseProvider theme={theme}>
-				<Navigation />
-			</NativeBaseProvider>
+			<RecoilRoot>
+				<NativeBaseProvider theme={theme}>
+					<Navigation />
+				</NativeBaseProvider>
+			</RecoilRoot>
 		</SSRProvider>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackNavigator } from '../components/Navigation/Types';
@@ -17,33 +17,21 @@ import {
 import { Swipeable } from 'react-native-gesture-handler';
 
 import {
-	collection,
-	deleteDoc,
-	doc,
-	onSnapshot,
-	orderBy,
-	query,
-	setDoc,
-	serverTimestamp,
-	getDoc,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase/firebase';
-
-import {
 	uniqueNamesGenerator,
 	adjectives,
 	animals,
 } from 'unique-names-generator';
 
+import { chatsState } from '../atoms';
+import { useRecoilState } from 'recoil';
+
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
-		[]
-	);
+	const [chatData, setChatData] = useRecoilState(chatsState)
 	const [isSwiping, setIsSwiping] = useState(false);
 
-	const SwipeableItem = ({ item, onDelete, onPress }) => {
+	const SwipeableItem = ({ item, onDelete, onPress }: { item: any, onDelete: Function, onPress: Function }) => {
 		const swipeableRef = useRef(null);
 
 		const handleSwipeStart = () => {
@@ -60,9 +48,9 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			}
 		};
 
-		const renderLeftActions = (progress, dragX) => {
+		const renderLeftActions = (progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
 			const onDeletePress = () => {
-				onDelete(item.chatId);
+				onDelete(item.chatName);
 				setIsSwiping(false);
 			};
 
@@ -94,13 +82,12 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 				renderLeftActions={renderLeftActions}
 				onSwipeableWillOpen={handleSwipeStart}
 				onSwipeableWillClose={handleSwipeRelease}
-				onSwipeableWillTransition={handleSwipeRelease} // Add this event handler
 			>
 				<TouchableOpacity
 					activeOpacity={1}
 					onPress={handlePress}
 					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text>{item.chatName}</Text>
+					<Text>{item.name}</Text>
 				</TouchableOpacity>
 			</Swipeable>
 		);
@@ -113,59 +100,44 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		  style: 'capital',
 		  separator: ' ',
 		});
+
+		const newChatId = uniqueNamesGenerator({
+			dictionaries: [adjectives, animals],
+			length: 2,
+		  });
 	  
-		const docRef = doc(collection(db, 'chats'));
 		const newChat = {
 		  name: newChatName,
-		  createdAt: serverTimestamp(),
+		  id: newChatId,
+		  messages: [],
 		};
 	  
+		setChatData((currentState) => [...currentState, newChat]);
+	  
 		try {
-			navigation.navigate('Chat', {
-			  chatId: docRef.id,
-			  chatName: newChatName,
-			});
-		setDoc(docRef, newChat);
+		  navigation.navigate('Chat', {
+			id: newChat.id,
+			name: newChat.name,
+		  });
 		} catch (error) {
 		  console.log('Error creating new chat:', error);
 		}
 	  };
 	  
-
-	const handleDeleteChat = (chatId: string) => {
-		const docRef = doc(db, 'chats', chatId);
-		deleteDoc(docRef)
-			.then(() => {
-				console.log('Entire Document has been deleted successfully.');
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
-
-	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
+	  const handleDeleteChat = (id: string) => {
+		const filteredChats = chatData.filter((chat) => chat.id !== id);
+		setChatData(filteredChats);
+	  };
+	
+	  const handleItemPress = (chat: { id: string; name: string }) => {
+		console.log('pressed');
 		navigation.navigate('Chat', {
-			chatId: chat.chatId,
-			chatName: chat.chatName,
+		  id: chat.id,
+		  name: chat.name,
 		});
-	};
+	  };
 
-	useLayoutEffect(() => {
-		const dbRef = collection(db, 'chats');
-		const q = query(dbRef, orderBy('createdAt', 'desc'));
-		const allChatDocuments = onSnapshot(q, docsSnap => {
-			const chatArray: { chatId: string; chatName: string }[] = [];
-			docsSnap.forEach(doc => {
-				const chat = {
-					chatId: doc.id,
-					chatName: doc.data().name,
-				};
-				chatArray.push(chat);
-			});
-			setChats(chatArray);
-		});
-		return allChatDocuments;
-	}, []);
+	console.log()
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
@@ -214,19 +186,16 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 						/>
 					</Center>
 					<VStack space={5} alignItems='center'>
-						{!!chats.length &&
-							chats.map(chat => (
+						{chatData.map(chat => (
 								<Box
 									w='90%'
 									bg='white'
 									rounded='md'
 									shadow={7}
-									key={chat.chatId}>
+									key={chat.name}>
 									<SwipeableItem
-										item={chat}
-										onDelete={() =>
-											handleDeleteChat(chat.chatId)
-										}
+										item={chat} 
+										onDelete={() => handleDeleteChat(chat.id)}
 										onPress={() => handleItemPress(chat)}
 									/>
 								</Box>

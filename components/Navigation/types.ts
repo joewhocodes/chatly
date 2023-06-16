@@ -1,6 +1,6 @@
 type ChatProps = {
-	chatId: string;
-	chatName: string;
+	id: string;
+	name: string;
 };
 
 

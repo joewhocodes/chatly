@@ -1,20 +1,14 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react';
+import React, {
+	useState,
+	useLayoutEffect,
+	useCallback,
+} from 'react';
 import {
 	TouchableOpacity,
 	TextInputChangeEventData,
 	NativeSyntheticEvent,
 } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { auth, db } from '../firebase/firebase';
-import {
-	collection,
-	addDoc,
-	doc,
-	updateDoc,
-	orderBy,
-	query,
-	onSnapshot,
-} from 'firebase/firestore';
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import {
@@ -28,79 +22,99 @@ import {
 	Modal,
 	Text,
 	Flex,
+	View,
 } from 'native-base';
+
+import {chatsState} from '../atoms';
+import { useRecoilState } from 'recoil';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
+	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [chatName, setChatName] = useState<string>(route.params.chatName);
-	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
+	const [chatName, setChatName] = useState<string>(route.params.name);
 
-	const currentUserName: string | undefined =
-		currentUser?.displayName || 'Unknown User';
-		const currentAvatar: string | undefined =
-		currentUser?.photoURL || undefined; // Assign undefined instead of 'Unknown photo'
+	let thisChat = chatData.find(chat => chat.name === route.params.name);
 	
-
 	useLayoutEffect(() => {
-		const collectionRef = collection(
-			db,
-			`chats/${route.params.chatId}/messages`
-		);
-		const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
-		const unsubscribe = onSnapshot(q, querySnapshot => {
-			setMessages(
-				querySnapshot.docs.map(doc => ({
-					_id: doc.data()._id,
-					createdAt: doc.data().createdAt.toDate(),
-					text: doc.data().text,
-					user: doc.data().user,
-				}))
-			);
-		});
-		return unsubscribe;
+		if (thisChat) {
+			const messages: IMessage[] = thisChat.messages.map(doc => ({
+				_id: doc.id,
+				text: doc.text,
+				user: { _id: doc.user.id_, avatar: doc.user.avatar },
+				createdAt: new Date(doc.createdAt),
+			}));
+			setMessages(messages.reverse());
+		}
+		// setChatName
 	}, []);
+
 	const onSend = useCallback((messages: IMessage[]) => {
+		const updatedChatData = chatData.map(chat => {
+			if (chat.name === route.params.name) {
+				const updatedMessages = [
+					...chat.messages,
+					...messages.map(message => ({
+						id: message._id,
+						createdAt: message.createdAt.toISOString(),
+						text: message.text,
+						user: {
+							id_: message.user._id,
+							avatar: message.user.avatar,
+						},
+					})),
+				];
+				return { ...chat, messages: updatedMessages };
+			}
+			return chat;
+		});
+
+		setChatData(updatedChatData);
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
 		);
+
 		const { _id, createdAt, text, user } = messages[0];
-		addDoc(collection(db, `chats/${route.params.chatId}/messages`), {
+		const newMessage: IMessage = {
 			_id,
 			createdAt,
 			text,
 			user,
-		});
-	}, []);
+		};
+		console.log('New message:', newMessage);
+	}, [chatData, route.params.name, setChatData]);
+
+	const customSystemMessage = props => {
+		return (
+		  <View>
+			{/* <Icon name="lock" color="#9d9d9d" size={16} /> */}
+			<Text>
+			  Your chat is secured. Remember to be cautious about what you share
+			  with others.
+			</Text>
+		  </View>
+		);
+	  };
 
 	const handleUpdateName = (oldName: string, newName: string) => {
-		const docRef = doc(db, 'chats', route.params.chatId);
-
-		const unsubscribe = onSnapshot(docRef, docSnapshot => {
-			if (docSnapshot.exists()) {
-				updateDoc(docRef, { name: newName })
-					.then(() => {
-						console.log('Name updated successfully!');
-						setShowModal(false);
-						navigation.setParams({ chatName: newName }); // Update route.params.chatName
-					})
-					.catch(error => {
-						console.error('Error updating name:', error);
-					});
+		let newChatData = chatData.map((chat) => {
+			if (chat.name === oldName) {
+			  return {
+				...chat,
+				name: newName,
+			  };
 			}
-		});
+			return chat;
+		  })
+		setChatData(newChatData)
+		setShowModal(false);
+	  };
 
-		return unsubscribe;
-	};
-
-	const onChange = (
-		e: NativeSyntheticEvent<TextInputChangeEventData>
-	): void => {
+	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setChatName(e.nativeEvent.text);
-	};
+	  };
 
 	return (
 		<Box h='100%' backgroundColor='white'>
@@ -110,14 +124,14 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						<Box>
 							<TouchableOpacity
 								onPress={() => navigation.navigate('ChatList')}>
-							<Image 
-								source={require('../assets/back-arrow.png')}
-								alt={'back arrow'}
-								mt='7px'
-							/>
+								<Image
+									source={require('../assets/back-arrow.png')}
+									alt={'back arrow'}
+									mt='7px'
+								/>
 							</TouchableOpacity>
 						</Box>
-						<Image 
+						<Image
 							source={require('../assets/logo.png')}
 							alt={'logo'}
 							mr={'45px'}
@@ -152,7 +166,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								variant='ghost'
 								colorScheme='blueGray'
 								onPress={() => {
-									setChatName(route.params.chatName);
+									setChatName(chatName);
 									setShowModal(false);
 								}}>
 								Cancel
@@ -160,7 +174,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							<Button
 								onPress={() => {
 									handleUpdateName(
-										route.params.chatName,
+										route.params.name,
 										chatName
 									);
 								}}>
@@ -180,8 +194,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					backgroundColor: '#fff',
 				}}
 				user={{
-					_id: currentUserName,
-					avatar: currentAvatar,
+					_id: 'cat_lord',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				}}
 			/>
 		</Box>
