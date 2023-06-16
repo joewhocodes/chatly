@@ -35,12 +35,11 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
 
+	let thisChat = chatData.find(chat => chat.name === route.params.name);
+	
 	useLayoutEffect(() => {
-		const findChat = chatData.find(
-			chat => chat.name === route.params.name
-		)?.messages;
-		if (findChat) {
-			const messages: IMessage[] = findChat.map(doc => ({
+		if (thisChat) {
+			const messages: IMessage[] = thisChat.messages.map(doc => ({
 				_id: doc.id,
 				text: doc.text,
 				user: { _id: doc.user.id_, avatar: doc.user.avatar },
@@ -48,7 +47,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			}));
 			setMessages(messages.reverse());
 		}
-		setChatName
+		// setChatName
 	}, []);
 
 	const onSend = useCallback((messages: IMessage[]) => {
@@ -68,15 +67,26 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	}, []);
 
 	const handleUpdateName = (oldName: string, newName: string) => {
-		setChatName(newName);
+		let newChatData = chatData.map((chat) => {
+			if (chat.name === oldName) {
+			  return {
+				...chat,
+				name: newName,
+			  };
+			}
+			return chat;
+		  })
+		console.log(newChatData)
+		setChatData(newChatData)
 		setShowModal(false);
-	};
+	  };
 
-	const onChange = (
-		e: NativeSyntheticEvent<TextInputChangeEventData>
-	): void => {
+
+	
+
+	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setChatName(e.nativeEvent.text);
-	};
+	  };
 
 	return (
 		<Box h='100%' backgroundColor='white'>
