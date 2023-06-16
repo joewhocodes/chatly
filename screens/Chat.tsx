@@ -59,37 +59,27 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			}
 		  }, []);
 
-	const onSend = useCallback((messages: IMessage[]) => {
-		setMessages(previousMessages =>
-			GiftedChat.append(previousMessages, messages)
-		);
-		const { _id, createdAt, text, user } = messages[0];
-		addDoc(collection(db, `chats/${route.params.id}/messages`), {
-			_id,
-			createdAt,
-			text,
-			user,
-		});
-	}, []);
+		  const onSend = useCallback((messages: IMessage[]) => {
+			setMessages(previousMessages =>
+			  GiftedChat.append(previousMessages, messages)
+			);
+		  
+			const { _id, createdAt, text, user } = messages[0];
+			const newMessage: IMessage = {
+			  _id,
+			  createdAt,
+			  text,
+			  user,
+			};
+		  
+			// Update the logic to add the new message to the database or perform any necessary actions
+			// For now, let's just log the new message
+			console.log('New message:', newMessage);
+		  }, []);
 
 	const handleUpdateName = (oldName: string, newName: string) => {
-		const docRef = doc(db, 'chats', route.params.chatId);
-
-		const unsubscribe = onSnapshot(docRef, docSnapshot => {
-			if (docSnapshot.exists()) {
-				updateDoc(docRef, { name: newName })
-					.then(() => {
-						console.log('Name updated successfully!');
-						setShowModal(false);
-						navigation.setParams({ chatName: newName }); // Update route.params.chatName
-					})
-					.catch(error => {
-						console.error('Error updating name:', error);
-					});
-			}
-		});
-
-		return unsubscribe;
+		setChatName(newName)
+		setShowModal(false);
 	};
 
 	const onChange = (
@@ -122,7 +112,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					</Flex>
 					<Center>
 						<Heading color={'white'} fontFamily={'Jua-Regular'}>
-							{route.params.name}
+							{chatName}
 						</Heading>
 						<TouchableOpacity onPress={() => setShowModal(true)}>
 							<Text color='white' fontFamily={'Jua-Regular'}>
@@ -148,7 +138,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								variant='ghost'
 								colorScheme='blueGray'
 								onPress={() => {
-									setChatName(route.params.name);
+									setChatName(chatName);
 									setShowModal(false);
 								}}>
 								Cancel
