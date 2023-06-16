@@ -97,7 +97,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					activeOpacity={1}
 					onPress={handlePress}
 					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text>{item.name}</Text>
+					<Text fontFamily={'Jua-Regular'} textAlign={'center'}>{item.name}</Text>
 				</TouchableOpacity>
 			</Swipeable>
 		);
