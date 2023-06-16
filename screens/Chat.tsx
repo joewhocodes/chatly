@@ -51,6 +51,26 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	}, []);
 
 	const onSend = useCallback((messages: IMessage[]) => {
+		const updatedChatData = chatData.map(chat => {
+			if (chat.name === route.params.name) {
+				const updatedMessages = [
+					...chat.messages,
+					...messages.map(message => ({
+						id: message._id,
+						createdAt: message.createdAt.toISOString(),
+						text: message.text,
+						user: {
+							id_: message.user._id,
+							avatar: message.user.avatar,
+						},
+					})),
+				];
+				return { ...chat, messages: updatedMessages };
+			}
+			return chat;
+		});
+
+		setChatData(updatedChatData);
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
 		);
@@ -62,9 +82,10 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			text,
 			user,
 		};
-		// Update the logic to add the new message
 		console.log('New message:', newMessage);
-	}, []);
+	}, [chatData, route.params.name, setChatData]);
+
+
 
 	const handleUpdateName = (oldName: string, newName: string) => {
 		let newChatData = chatData.map((chat) => {
@@ -76,13 +97,9 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			}
 			return chat;
 		  })
-		console.log(newChatData)
 		setChatData(newChatData)
 		setShowModal(false);
 	  };
-
-
-	
 
 	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setChatName(e.nativeEvent.text);
