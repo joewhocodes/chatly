@@ -27,11 +27,17 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
+// type SwappableItemParams = {
+// 	item: object;
+// 	onDelete: (id: string) => void;
+// 	onPress: (id: string, name: string) => void;
+// };
+
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState)
 	const [isSwiping, setIsSwiping] = useState(false);
 
-	const SwipeableItem = ({ item, onDelete, onPress }) => {
+	const SwipeableItem = ({ item, onDelete, onPress }: SwappableItemParams) => {
 		const swipeableRef = useRef(null);
 
 		const handleSwipeStart = () => {
@@ -50,7 +56,8 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 		const renderLeftActions = (progress, dragX) => {
 			const onDeletePress = () => {
-				onDelete(item.chatId);
+				onDelete(item.chatName);
+				setIsSwiping(false);
 			};
 
 			const trans = dragX.interpolate({
@@ -120,20 +127,18 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	  };
 	  
 
-	const handleDeleteChat = (name: string ) => {
-		console.log('chatData:', chatData.map(e => e.name))
-		console.log('name:', name)
-		console.log(chatData.filter(chat => chat.name == name))
-		const filteredChats = chatData.filter(chat => chat.name !== name)
+	  const handleDeleteChat = (id: string) => {
+		const filteredChats = chatData.filter((chat) => chat.id !== id);
 		setChatData(filteredChats);
-	};
-
-	const handleItemPress = (chat: { id: string; name: string }) => {
+	  };
+	
+	  const handleItemPress = (chat: { id: string; name: string }) => {
+		console.log('pressed');
 		navigation.navigate('Chat', {
-			id: chat.id,
-			name: chat.name,
+		  id: chat.id,
+		  name: chat.name,
 		});
-	};
+	  };
 
 	console.log()
 
@@ -193,9 +198,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 									key={chat.name}>
 									<SwipeableItem
 										item={chat} 
-										onDelete={() =>
-											handleDeleteChat(chat.name)
-										}
+										onDelete={() => handleDeleteChat(chat.id)}
 										onPress={() => handleItemPress(chat)}
 									/>
 								</Box>
