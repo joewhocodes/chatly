@@ -23,21 +23,23 @@ import {
 } from 'unique-names-generator';
 
 import { chatsState } from '../atoms';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
-// type SwappableItemParams = {
-// 	item: object;
-// 	onDelete: (id: string) => void;
-// 	onPress: (id: string, name: string) => void;
-// };
-
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chatData, setChatData] = useRecoilState(chatsState)
+	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [isSwiping, setIsSwiping] = useState(false);
 
-	const SwipeableItem = ({ item, onDelete, onPress }: { item: any, onDelete: Function, onPress: Function }) => {
+	const SwipeableItem = ({
+		item,
+		onDelete,
+		onPress,
+	}: {
+		item: any;
+		onDelete: Function;
+		onPress: Function;
+	}) => {
 		const swipeableRef = useRef(null);
 
 		const handleSwipeStart = () => {
@@ -54,7 +56,16 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			}
 		};
 
-		const renderLeftActions = (progress, dragX) => {
+		const renderLeftActions = (
+			progress: any,
+			dragX: {
+				interpolate: (arg0: {
+					inputRange: number[];
+					outputRange: number[];
+					extrapolate: string;
+				}) => any;
+			}
+		) => {
 			const onDeletePress = () => {
 				onDelete(item.chatName);
 				setIsSwiping(false);
@@ -102,45 +113,44 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({
-		  dictionaries: [adjectives, animals],
-		  length: 2,
-		  style: 'capital',
-		  separator: ' ',
+			dictionaries: [adjectives, animals],
+			length: 2,
+			style: 'capital',
+			separator: ' ',
 		});
-	  
-		const newChat = {
-		  name: newChatName,
-		  id: 'wefwvsa',
-		  messages: [], // Add an empty messages array for the new chat
-		};
-	  
-		setChatData((currentState) => [...currentState, newChat]);
-	  
-		try {
-		  navigation.navigate('Chat', {
-			id: newChat.id,
-			name: newChat.name,
-		  });
-		} catch (error) {
-		  console.log('Error creating new chat:', error);
-		}
-	  };
-	  
 
-	  const handleDeleteChat = (id: string) => {
-		const filteredChats = chatData.filter((chat) => chat.id !== id);
+		const newChat = {
+			name: newChatName,
+			id: 'wefwvsa',
+			messages: [],
+		};
+
+		setChatData(currentState => [...currentState, newChat]);
+
+		try {
+			navigation.navigate('Chat', {
+				id: newChat.id,
+				name: newChat.name,
+			});
+		} catch (error) {
+			console.log('Error creating new chat:', error);
+		}
+	};
+
+	const handleDeleteChat = (id: string) => {
+		const filteredChats = chatData.filter(chat => chat.id !== id);
 		setChatData(filteredChats);
-	  };
-	
-	  const handleItemPress = (chat: { id: string; name: string }) => {
+	};
+
+	const handleItemPress = (chat: { id: string; name: string }) => {
 		console.log('pressed');
 		navigation.navigate('Chat', {
-		  id: chat.id,
-		  name: chat.name,
+			id: chat.id,
+			name: chat.name,
 		});
-	  };
+	};
 
-	console.log()
+	console.log();
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
@@ -190,19 +200,19 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					</Center>
 					<VStack space={5} alignItems='center'>
 						{chatData.map(chat => (
-								<Box
-									w='90%'
-									bg='white'
-									rounded='md'
-									shadow={7}
-									key={chat.name}>
-									<SwipeableItem
-										item={chat} 
-										onDelete={() => handleDeleteChat(chat.id)}
-										onPress={() => handleItemPress(chat)}
-									/>
-								</Box>
-							))}
+							<Box
+								w='90%'
+								bg='white'
+								rounded='md'
+								shadow={7}
+								key={chat.name}>
+								<SwipeableItem
+									item={chat}
+									onDelete={() => handleDeleteChat(chat.id)}
+									onPress={() => handleItemPress(chat)}
+								/>
+							</Box>
+						))}
 					</VStack>
 				</Box>
 			</ScrollView>
