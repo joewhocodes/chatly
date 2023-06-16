@@ -100,10 +100,15 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		  style: 'capital',
 		  separator: ' ',
 		});
+
+		const newChatId = uniqueNamesGenerator({
+			dictionaries: [adjectives, animals],
+			length: 2,
+		  });
 	  
 		const newChat = {
 		  name: newChatName,
-		  id: 'wefwvsa',
+		  id: newChatId,
 		  messages: [],
 		};
 	  
