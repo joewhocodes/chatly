@@ -120,7 +120,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
 				},
 			},
-            {
+			{
 				id: '9245ey-s34d34bbfdg5',
 				createdAt: '2022-03-25 21:20:00',
 				text: 'Nah but I kinda like it so far',
@@ -134,7 +134,7 @@ export default chats = [
 	{
 		name: 'Forthcoming Gibbon',
 		id: 'ertherth',
-        messages: [
+		messages: [
 			{
 				id: '92938d-88erg',
 				createdAt: '2022-03-25 21:16:00',
@@ -153,7 +153,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92r95bbd-4e',
 				createdAt: '2022-03-25 11:13:00',
 				text: 'Where in the world are you?',
@@ -198,7 +198,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299m67bderg',
 				createdAt: '2022-03-25 11:15:00',
 				text: 'HOT',
@@ -207,7 +207,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/2007_2068109271_229326b940_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92995bbdsrg',
 				createdAt: '2022-03-25 11:15:00',
 				text: 'Just sat indoors sweating',
@@ -216,7 +216,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/2007_2068109271_229326b940_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: 'sdferg',
 				createdAt: '2022-03-25 11:15:00',
 				text: 'I like the food here though',
@@ -266,7 +266,7 @@ export default chats = [
 	{
 		name: 'Secondary Fox',
 		id: 'erthedfgb',
-        messages: [
+		messages: [
 			{
 				id: '92995g34sdd-dc80-47834',
 				createdAt: '2022-03-22 16:14:00',
@@ -276,7 +276,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92r95bdsbbd-4e',
 				createdAt: '2022-03-22 16:18:00',
 				text: 'Hey',
@@ -285,7 +285,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92fgshr95bbd-4e',
 				createdAt: '2022-03-22 16:20:00',
 				text: 'Helloooooo',
@@ -294,7 +294,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92995sfghbhdfgbderg',
 				createdAt: '2022-03-22 16:22:00',
 				text: 'Sorry had to answer the door!',
@@ -303,7 +303,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52750642974_d92f69439c_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92995bhdasdffgbderg',
 				createdAt: '2022-03-22 16:22:00',
 				text: ':)',
@@ -348,7 +348,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '929aff9m67bderg',
 				createdAt: '2022-03-22 16:23:00',
 				text: 'A package for my brother, so no!',
@@ -362,7 +362,7 @@ export default chats = [
 	{
 		name: 'Silly Eagle',
 		id: 'ertbxcvbd',
-        messages: [
+		messages: [
 			{
 				id: '92995g34sd345345d-dc80-47834',
 				createdAt: '2022-03-20 11:14:00',
@@ -372,7 +372,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299wergsdfg5sfghbhdfgbderg',
 				createdAt: '2022-03-20 11:15:00',
 				text: 'Hi!',
@@ -381,7 +381,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52682003064_4355ce4967_n_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92sdfg995bhdasdffgbderg',
 				createdAt: '2022-03-20 11:15:00',
 				text: 'Do you speak spanish?',
@@ -411,22 +411,22 @@ export default chats = [
 			{
 				id: '9sgg2995asdfasdfdmrth4',
 				createdAt: '2022-03-20 11:17:00',
-				text: 'I learnt a bit in school but I don\'t really use it',
+				text: "I learnt a bit in school but I don't really use it",
 				user: {
 					id_: 'cat_lord',
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92nhgfhg9aff9m67bderg',
 				createdAt: '2022-03-20 11:17:00',
-				text: 'Que lastima! It\'s a beautiful language :) ',
+				text: "Que lastima! It's a beautiful language :) ",
 				user: {
 					id_: 'angry_leopard',
 					avatar: 'https://loremflickr.com/cache/resized/65535_52682003064_4355ce4967_n_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '929aff9fgm67bderg',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'Can you speak any others?',
@@ -435,7 +435,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52682003064_4355ce4967_n_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299s34g5asdfasdfdmrth4',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'I lived in Germany for 2 years so learnt some German',
@@ -444,7 +444,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92995asdfasgsdfgdfdmrth4',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'But again, I never use it XD',
@@ -462,13 +462,13 @@ export default chats = [
 			{
 				id: '92995g34sd3453d45d-dc80-47834',
 				createdAt: '2022-03-20 11:14:00',
-				text: 'What\'s your favourite color?',
+				text: "What's your favourite color?",
 				user: {
 					id_: 'cat_lord',
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299w344ergsdfg5sfghbhdfgbderg',
 				createdAt: '2022-03-20 11:15:00',
 				text: 'Green',
@@ -477,7 +477,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/6215_6382411397_dd60a3f1e0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92s46dfg995bhdasdffgbderg',
 				createdAt: '2022-03-20 11:15:00',
 				text: 'You?',
@@ -540,7 +540,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92nhgfhg9adfghff9m67bderg',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'Me too, the soundtrack is amazinggggg',
@@ -549,7 +549,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/6215_6382411397_dd60a3f1e0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299s34gser5asdfasdfdmrth4',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'I love Elton John in general :)',
@@ -558,7 +558,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92995asdfahdfghsgsdfgdfdmrth4',
 				createdAt: '2022-03-20 11:17:00',
 				text: 'I have tickets to see him next year!',
@@ -591,7 +591,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299wdfg5sfghbhdfgbderg',
 				createdAt: '2022-03-20 21:15:00',
 				text: 'Good good, eating breakfast',
@@ -600,7 +600,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/3543_3484613176_a4be8517d0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92s46ddffgbderg',
 				createdAt: '2022-03-20 21:15:00',
 				text: 'And yourself?',
@@ -648,13 +648,13 @@ export default chats = [
 			{
 				id: '9sggfasdfdmrth4',
 				createdAt: '2022-03-20 21:17:00',
-				text: 'That is crazy, it\'s 9pm here!!',
+				text: "That is crazy, it's 9pm here!!",
 				user: {
 					id_: 'cat_lord',
 					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92ghff9m67bderg',
 				createdAt: '2022-03-20 21:17:00',
 				text: 'Wow this app is cool',
@@ -663,7 +663,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/3543_3484613176_a4be8517d0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '9299sfdmrth4',
 				createdAt: '2022-03-20 21:17:00',
 				text: 'I like it too!',
@@ -677,8 +677,8 @@ export default chats = [
 	{
 		name: 'Conventional Chickadee',
 		id: 'sbrwr45',
-        messages: [
-            {
+		messages: [
+			{
 				id: '92rgsdfg5sfghbhdfgbderg',
 				createdAt: '2022-03-14 07:15:00',
 				text: 'Hi are you in US?',
@@ -687,7 +687,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/3543_3484613176_a4be8517d0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '46dfg995bhdasdffgbderg',
 				createdAt: '2022-03-14 07:15:00',
 				text: 'Or somewhere else?',
@@ -723,7 +723,7 @@ export default chats = [
 					avatar: 'https://loremflickr.com/cache/resized/3543_3484613176_a4be8517d0_320_240_nofilter.jpg',
 				},
 			},
-            {
+			{
 				id: '92nhgbderg',
 				createdAt: '2022-03-14 07:17:00',
 				text: 'How is Aus?',
