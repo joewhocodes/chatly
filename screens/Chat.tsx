@@ -1,11 +1,11 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
-import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex } from 'native-base';
+import { TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
+import { Box, Button, FormControl, Input, Modal } from 'native-base';
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
-import { StackNavigator } from '../components/Navigation/Types';
+import { StackNavigator } from '../components/Navigation/types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
 import { chatsState } from '../atoms/atoms';
