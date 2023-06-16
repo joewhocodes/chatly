@@ -2,7 +2,6 @@ import React, {
 	useState,
 	useLayoutEffect,
 	useCallback,
-	useEffect,
 } from 'react';
 import {
 	TouchableOpacity,
@@ -25,17 +24,19 @@ import {
 	Flex,
 } from 'native-base';
 
-import myChatData from '../data/chats';
+import {chatsState} from '../atoms';
+import { useRecoilState } from 'recoil';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
+	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
 
 	useLayoutEffect(() => {
-		const findChat = myChatData.find(
+		const findChat = chatData.find(
 			chat => chat.name === route.params.name
 		)?.messages;
 		if (findChat) {

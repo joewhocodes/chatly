@@ -22,16 +22,13 @@ import {
 	animals,
 } from 'unique-names-generator';
 
-import myChatData from '../data/chats';
 import { chatsState } from '../atoms';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useRecoilState(chatsState)
 	const [chatData, setChatData] = useRecoilState(chatsState)
-	// const [chatData, setChatData] = useState(myChatData)
 	const [isSwiping, setIsSwiping] = useState(false);
 
 	const SwipeableItem = ({ item, onDelete, onPress }) => {
@@ -107,15 +104,16 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const newChat = {
 		  name: newChatName,
 		  id: 'wefwvsa',
+		  messages: [], // Add an empty messages array for the new chat
 		};
-
-		chatData.push(newChat)
-	    
+	  
+		setChatData((currentState) => [...currentState, newChat]);
+	  
 		try {
-			navigation.navigate('Chat', {
-			  id: newChat.id,
-			  name: newChat.name,
-			});
+		  navigation.navigate('Chat', {
+			id: newChat.id,
+			name: newChat.name,
+		  });
 		} catch (error) {
 		  console.log('Error creating new chat:', error);
 		}
@@ -126,6 +124,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 	};
 
 	const handleItemPress = (chat: { id: string; name: string }) => {
+		console.log(chat.name)
 		navigation.navigate('Chat', {
 			id: chat.id,
 			name: chat.name,
