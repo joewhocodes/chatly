@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { VStack, Center, Heading, Button, Flex, Box, Text, Image, ScrollView } from 'native-base';
+import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { useRecoilState } from 'recoil';
 import { chatsState } from '../atoms/atoms';
@@ -41,7 +41,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 				name: newChat.name,
 			});
 		} catch (error) {
-			console.log('Error creating new chat:', error);
+			console.log(error);
 		}
 	};
 
@@ -51,7 +51,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	const handleItemPress = (chat: { id: string; name: string }) => {
-		console.log('pressed');
 		navigation.navigate('Chat', {
 			id: chat.id,
 			name: chat.name,
