@@ -1,29 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackNavigator } from '../components/Navigation/Types';
-import {
-	VStack,
-	Center,
-	Heading,
-	Button,
-	Flex,
-	Box,
-	Text,
-	Image,
-	ScrollView,
-} from 'native-base';
-
+import { VStack, Center, Heading, Button, Flex, Box, Text, Image, ScrollView } from 'native-base';
 import { Swipeable } from 'react-native-gesture-handler';
-
-import {
-	uniqueNamesGenerator,
-	adjectives,
-	animals,
-} from 'unique-names-generator';
-
-import { chatsState } from '../atoms';
+import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { useRecoilState } from 'recoil';
+import { chatsState } from '../atoms';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackNavigator } from '../components/Navigation/Types';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 

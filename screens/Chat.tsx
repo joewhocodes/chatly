@@ -1,34 +1,16 @@
-import React, {
-	useState,
-	useLayoutEffect,
-	useCallback,
-} from 'react';
-import {
-	TouchableOpacity,
-	TextInputChangeEventData,
-	NativeSyntheticEvent,
-} from 'react-native';
+import React, { useState, useLayoutEffect, useCallback } from 'react';
+import { TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
+import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex, View} from 'native-base';
+
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
+
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import {
-	Box,
-	Button,
-	Center,
-	Image,
-	FormControl,
-	Heading,
-	Input,
-	Modal,
-	Text,
-	Flex,
-	View,
-} from 'native-base';
 
 import {chatsState} from '../atoms';
 import { useRecoilState } from 'recoil';
 
-type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
@@ -36,7 +18,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
 
-	let thisChat = chatData.find(chat => chat.name === route.params.name);
+	const thisChat = chatData.find(chat => chat.name === route.params.name);
 	
 	useLayoutEffect(() => {
 		if (thisChat) {
@@ -48,7 +30,6 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			}));
 			setMessages(messages.reverse());
 		}
-		// setChatName
 	}, []);
 
 	const onSend = useCallback((messages: IMessage[]) => {
@@ -58,7 +39,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					...chat.messages,
 					...messages.map(message => ({
 						id: message._id,
-						createdAt: message.createdAt.toISOString(),
+						createdAt: message.createdAt.toString(),
 						text: message.text,
 						user: {
 							id_: message.user._id,
@@ -83,20 +64,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			text,
 			user,
 		};
-		console.log('New message:', newMessage);
 	}, [chatData, route.params.name, setChatData]);
-
-	const customSystemMessage = props => {
-		return (
-		  <View>
-			{/* <Icon name="lock" color="#9d9d9d" size={16} /> */}
-			<Text>
-			  Your chat is secured. Remember to be cautious about what you share
-			  with others.
-			</Text>
-		  </View>
-		);
-	  };
 
 	const handleUpdateName = (oldName: string, newName: string) => {
 		let newChatData = chatData.map((chat) => {
@@ -112,7 +80,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		setShowModal(false);
 	  };
 
-	const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
+	const handleOnChange = (e: NativeSyntheticEvent<TextInputChangeEventData>): void => {
 		setChatName(e.nativeEvent.text);
 	  };
 
@@ -157,7 +125,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					<Modal.Header>Change Chat Name</Modal.Header>
 					<Modal.Body>
 						<FormControl mb='3' mt='3'>
-							<Input value={chatName} onChange={onChange} />
+							<Input value={chatName} onChange={handleOnChange} />
 						</FormControl>
 					</Modal.Body>
 					<Modal.Footer>
