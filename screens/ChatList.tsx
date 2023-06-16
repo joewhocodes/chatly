@@ -23,11 +23,15 @@ import {
 } from 'unique-names-generator';
 
 import myChatData from '../data/chats';
+import { chatsState } from '../atoms';
+import { useRecoilState } from 'recoil';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chatData, setChatData] = useState(myChatData)
+	const [chats, setChats] = useRecoilState(chatsState)
+	const [chatData, setChatData] = useRecoilState(chatsState)
+	// const [chatData, setChatData] = useState(myChatData)
 	const [isSwiping, setIsSwiping] = useState(false);
 
 	const SwipeableItem = ({ item, onDelete, onPress }) => {
@@ -128,6 +132,8 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		});
 	};
 
+	console.log()
+
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
 			<Box backgroundColor={'primary.500'} pb={'22px'}>
@@ -175,7 +181,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 						/>
 					</Center>
 					<VStack space={5} alignItems='center'>
-						{myChatData.map(chat => (
+						{chatData.map(chat => (
 								<Box
 									w='90%'
 									bg='white'
