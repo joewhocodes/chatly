@@ -35,12 +35,15 @@ import {
 	animals,
 } from 'unique-names-generator';
 
+import myChatData from '../data/chats';
+
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
+	const [chats, setChats] = useState<{ id: string; name: string }[]>(
 		[]
 	);
+	const [chatData, setChatData] = useState(myChatData)
 	const [isSwiping, setIsSwiping] = useState(false);
 
 	const SwipeableItem = ({ item, onDelete, onPress }) => {
@@ -99,7 +102,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 					activeOpacity={1}
 					onPress={handlePress}
 					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text>{item.chatName}</Text>
+					<Text>{item.name}</Text>
 				</TouchableOpacity>
 			</Swipeable>
 		);
@@ -113,18 +116,20 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		  separator: ' ',
 		});
 	  
-		const docRef = doc(collection(db, 'chats'));
 		const newChat = {
 		  name: newChatName,
 		  createdAt: serverTimestamp(),
+		  id: 'wefwvsa',
 		};
+
+		chatData.push(newChat)
+		console.log(chatData)
 	  
 		try {
 			navigation.navigate('Chat', {
-			  chatId: docRef.id,
-			  chatName: newChatName,
+			  id: newChat.id,
+			  name: newChat.name,
 			});
-		setDoc(docRef, newChat);
 		} catch (error) {
 		  console.log('Error creating new chat:', error);
 		}
@@ -144,7 +149,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 
 	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
 		navigation.navigate('Chat', {
-			chatId: chat.chatId,
+			id: chat.chatId,
 			chatName: chat.chatName,
 		});
 	};
@@ -213,16 +218,15 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 						/>
 					</Center>
 					<VStack space={5} alignItems='center'>
-						{!!chats.length &&
-							chats.map(chat => (
+						{myChatData.map(chat => (
 								<Box
 									w='90%'
 									bg='white'
 									rounded='md'
 									shadow={7}
-									key={chat.chatId}>
+									key={chat.name}>
 									<SwipeableItem
-										item={chat}
+										item={chat} 
 										onDelete={() =>
 											handleDeleteChat(chat.chatId)
 										}
