@@ -76,7 +76,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 				</Heading>
 			</Box>
 			<ScrollView>
-				<Box>
+				<Box mb={'20px'}>
 					<Flex
 						direction={'row'}
 						justifyContent={'space-between'}
