@@ -1,4 +1,4 @@
-export default chats = [
+const chats = [
 	{
 		name: 'Expected Camel',
 		id: 'grtgertg',
@@ -735,3 +735,5 @@ export default chats = [
 		],
 	},
 ];
+
+export default chats;

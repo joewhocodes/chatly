@@ -38,12 +38,12 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				const updatedMessages = [
 					...chat.messages,
 					...messages.map(message => ({
-						id: message._id,
+						id: message._id.toString(),
 						createdAt: message.createdAt.toString(),
 						text: message.text,
 						user: {
-							id_: message.user._id,
-							avatar: message.user.avatar,
+							id_: message.user._id.toString(),
+							avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg'
 						},
 					})),
 				];
