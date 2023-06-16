@@ -37,7 +37,9 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.chatName);
 	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
+	const [newMessages, setNewMessages] = useState();
 
+	console.log(route.params)
 	const currentUserName: string | undefined =
 		currentUser?.displayName || 'Unknown User';
 		const currentAvatar: string | undefined =
@@ -126,7 +128,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					</Flex>
 					<Center>
 						<Heading color={'white'} fontFamily={'Jua-Regular'}>
-							{chatName}
+							{route.params.name}
 						</Heading>
 						<TouchableOpacity onPress={() => setShowModal(true)}>
 							<Text color='white' fontFamily={'Jua-Regular'}>
