@@ -92,7 +92,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 						<TouchableOpacity>
 							<Button
 								mr={'20px'}
-								alignSelf={'end'}
 								backgroundColor={'teal.500'}
 								onPress={handleCreateNewChat}>
 								+
