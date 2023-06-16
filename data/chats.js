@@ -2,11 +2,10 @@ export default chats = [
     {
         name: 'Expected Camel',
         id: 'grtgertg',
-        messages: ['hello']
     },
     {
         name: 'Forthcoming Gibbon',
-        id: 'ertherth'
+        id: 'ertherth',
     },
     {
         name: 'Secondary Fox',

@@ -23,9 +23,7 @@ import {
 	onSnapshot,
 	orderBy,
 	query,
-	setDoc,
 	serverTimestamp,
-	getDoc,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebase';
 
@@ -40,9 +38,6 @@ import myChatData from '../data/chats';
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ id: string; name: string }[]>(
-		[]
-	);
 	const [chatData, setChatData] = useState(myChatData)
 	const [isSwiping, setIsSwiping] = useState(false);
 
@@ -123,7 +118,6 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		};
 
 		chatData.push(newChat)
-		console.log(chatData)
 	  
 		try {
 			navigation.navigate('Chat', {
@@ -147,29 +141,12 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			});
 	};
 
-	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
+	const handleItemPress = (chat: { id: any; name: any }) => {
 		navigation.navigate('Chat', {
-			id: chat.chatId,
-			chatName: chat.chatName,
+			id: chat.id,
+			name: chat.name,
 		});
 	};
-
-	useLayoutEffect(() => {
-		const dbRef = collection(db, 'chats');
-		const q = query(dbRef, orderBy('createdAt', 'desc'));
-		const allChatDocuments = onSnapshot(q, docsSnap => {
-			const chatArray: { chatId: string; chatName: string }[] = [];
-			docsSnap.forEach(doc => {
-				const chat = {
-					chatId: doc.id,
-					chatName: doc.data().name,
-				};
-				chatArray.push(chat);
-			});
-			setChats(chatArray);
-		});
-		return allChatDocuments;
-	}, []);
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
