@@ -62,12 +62,11 @@ export default function App() {
 			.catch(error => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				// ...
 			});
 	}, []);
 
 	if (!fontsLoaded) {
-		return null; // or render a loading indicator
+		return null;
 	}
 
 	return (

@@ -60,10 +60,15 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 			}
 		};
 
-		const renderLeftActions = (progress, dragX) => {
+		const renderLeftActions = (
+			progress: Animated.AnimatedInterpolation<number>,
+			dragX: Animated.AnimatedInterpolation<number>
+		) => {
 			const onDeletePress = () => {
 				onDelete(item.chatId);
+				setIsSwiping(false);
 			};
+	
 
 			const trans = dragX.interpolate({
 				inputRange: [0, 100],
@@ -93,13 +98,14 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 				renderLeftActions={renderLeftActions}
 				onSwipeableWillOpen={handleSwipeStart}
 				onSwipeableWillClose={handleSwipeRelease}
-				onSwipeableWillTransition={handleSwipeRelease} // Add this event handler
 			>
 				<TouchableOpacity
 					activeOpacity={1}
 					onPress={handlePress}
 					style={{ backgroundColor: 'white', padding: 20 }}>
-					<Text>{item.chatName}</Text>
+				<Text fontFamily={'Jua-Regular'} textAlign={'center'}>
+					{item.chatName}
+				</Text>
 				</TouchableOpacity>
 			</Swipeable>
 		);
@@ -184,7 +190,7 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 				</Heading>
 			</Box>
 			<ScrollView>
-				<Box>
+				<Box mb={'20px'}>
 					<Flex
 						direction={'row'}
 						justifyContent={'space-between'}
