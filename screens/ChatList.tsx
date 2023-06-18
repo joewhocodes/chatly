@@ -1,81 +1,50 @@
-import React, { useLayoutEffect, useState, useRef } from 'react';
-import { TouchableOpacity, Animated } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
+
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
+
 import { StackNavigator } from '../components/Navigation/Types';
-import {
-	VStack,
-	Center,
-	Heading,
-	Button,
-	Flex,
-	Box,
-	Text,
-	Image,
-	ScrollView,
-} from 'native-base';
-
-import {
-	collection,
-	deleteDoc,
-	doc,
-	onSnapshot,
-	orderBy,
-	query,
-	setDoc,
-	serverTimestamp,
-	getDoc,
-} from 'firebase/firestore';
-import { auth, db } from '../firebase/firebase';
-
-import {
-	uniqueNamesGenerator,
-	adjectives,
-	animals,
-} from 'unique-names-generator';
-
 import SwipeableItem from '../components/SwipeableItem';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
-const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string, messages: any[] }[]>([]);
-
+const ChatList = ({ navigation }: ChatListScreenProps) => {
+	const [chats, setChats] = useState<
+		{ chatId: string; chatName: string; messages: any[] }[]
+	>([]);
 
 	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({
-		  dictionaries: [adjectives, animals],
-		  length: 2,
-		  style: 'capital',
-		  separator: ' ',
+			dictionaries: [adjectives, animals],
+			length: 2,
+			style: 'capital',
+			separator: ' ',
 		});
-	  
+
 		const docRef = doc(collection(db, 'chats'));
 		const newChat = {
-		  name: newChatName,
-		  createdAt: serverTimestamp(),
+			name: newChatName,
+			createdAt: serverTimestamp(),
 		};
-	  
+
 		try {
 			navigation.navigate('Chat', {
-			  chatId: docRef.id,
-			  chatName: newChatName,
+				chatId: docRef.id,
+				chatName: newChatName,
 			});
-		setDoc(docRef, newChat);
+			setDoc(docRef, newChat);
 		} catch (error) {
-		  console.log('Error creating new chat:', error);
+			console.log('Error creating new chat:', error);
 		}
-	  };
-	  
+	};
 
 	const handleDeleteChat = (chatId: string) => {
 		const docRef = doc(db, 'chats', chatId);
-		deleteDoc(docRef)
-			.then(() => {
-				console.log('Entire Document has been deleted successfully.');
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		deleteDoc(docRef);
 	};
 
 	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
@@ -89,14 +58,18 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const dbRef = collection(db, 'chats');
 		const q = query(dbRef, orderBy('createdAt', 'desc'));
 		const allChatDocuments = onSnapshot(q, docsSnap => {
-			const chatArray: { chatId: string; chatName: string; messages: any[] }[] = [];
+			const chatArray: {
+				chatId: string;
+				chatName: string;
+				messages: any[];
+			}[] = [];
 			docsSnap.forEach(doc => {
-			  const chat = {
-				chatId: doc.id,
-				chatName: doc.data().name,
-				messages: doc.data().messages, // Include messages property here
-			  };
-			  chatArray.push(chat);
+				const chat = {
+					chatId: doc.id,
+					chatName: doc.data().name,
+					messages: doc.data().messages,
+				};
+				chatArray.push(chat);
 			});
 			setChats(chatArray);
 		});

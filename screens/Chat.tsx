@@ -1,34 +1,13 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import {
-	TouchableOpacity,
-	TextInputChangeEventData,
-	NativeSyntheticEvent,
-} from 'react-native';
+import { TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex } from 'native-base';
+
 import { auth, db } from '../firebase/firebase';
-import {
-	collection,
-	addDoc,
-	doc,
-	updateDoc,
-	orderBy,
-	query,
-	onSnapshot,
-} from 'firebase/firestore';
+import { addDoc, collection, doc, updateDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
+
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import {
-	Box,
-	Button,
-	Center,
-	Image,
-	FormControl,
-	Heading,
-	Input,
-	Modal,
-	Text,
-	Flex,
-} from 'native-base';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
@@ -40,9 +19,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	const currentUserName: string | undefined =
 		currentUser?.displayName || 'Unknown User';
-		const currentAvatar: string | undefined =
-		currentUser?.photoURL || undefined; // Assign undefined instead of 'Unknown photo'
-	
+	const currentAvatar: string | undefined =
+		currentUser?.photoURL || undefined;
 
 	useLayoutEffect(() => {
 		const collectionRef = collection(
@@ -63,6 +41,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 		return unsubscribe;
 	}, []);
+
 	const onSend = useCallback((messages: IMessage[]) => {
 		setMessages(previousMessages =>
 			GiftedChat.append(previousMessages, messages)
@@ -83,12 +62,11 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 			if (docSnapshot.exists()) {
 				updateDoc(docRef, { name: newName })
 					.then(() => {
-						console.log('Name updated successfully!');
 						setShowModal(false);
-						navigation.setParams({ chatName: newName }); // Update route.params.chatName
+						navigation.setParams({ chatName: newName });
 					})
 					.catch(error => {
-						console.error('Error updating name:', error);
+						console.error(error);
 					});
 			}
 		});
@@ -110,14 +88,14 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						<Box>
 							<TouchableOpacity
 								onPress={() => navigation.navigate('ChatList')}>
-							<Image 
-								source={require('../assets/back-arrow.png')}
-								alt={'back arrow'}
-								mt='7px'
-							/>
+								<Image
+									source={require('../assets/back-arrow.png')}
+									alt={'back arrow'}
+									mt='7px'
+								/>
 							</TouchableOpacity>
 						</Box>
-						<Image 
+						<Image
 							source={require('../assets/logo.png')}
 							alt={'logo'}
 							mr={'45px'}
