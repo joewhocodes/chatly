@@ -14,8 +14,6 @@ import {
 	ScrollView,
 } from 'native-base';
 
-import { Swipeable } from 'react-native-gesture-handler';
-
 import {
 	collection,
 	deleteDoc,
@@ -35,81 +33,13 @@ import {
 	animals,
 } from 'unique-names-generator';
 
+import SwipeableItem from '../components/SwipeableItem';
+
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
 const ChatList = ({ navigation, route }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<{ chatId: string; chatName: string }[]>(
-		[]
-	);
-	const [isSwiping, setIsSwiping] = useState(false);
+	const [chats, setChats] = useState<{ chatId: string; chatName: string, messages: any[] }[]>([]);
 
-	const SwipeableItem = ({ item, onDelete, onPress }) => {
-		const swipeableRef = useRef(null);
-
-		const handleSwipeStart = () => {
-			setIsSwiping(true);
-		};
-
-		const handleSwipeRelease = () => {
-			setIsSwiping(false);
-		};
-
-		const handlePress = () => {
-			if (!isSwiping) {
-				onPress();
-			}
-		};
-
-		const renderLeftActions = (
-			progress: Animated.AnimatedInterpolation<number>,
-			dragX: Animated.AnimatedInterpolation<number>
-		) => {
-			const onDeletePress = () => {
-				onDelete(item.chatId);
-				setIsSwiping(false);
-			};
-	
-
-			const trans = dragX.interpolate({
-				inputRange: [0, 100],
-				outputRange: [0, 1],
-				extrapolate: 'clamp',
-			});
-
-			return (
-				<TouchableOpacity onPress={onDeletePress}>
-					<Animated.View
-						style={{
-							backgroundColor: 'red',
-							justifyContent: 'center',
-							alignItems: 'flex-end',
-							padding: 20,
-							opacity: trans,
-						}}>
-						<Text style={{ color: 'white' }}>Delete</Text>
-					</Animated.View>
-				</TouchableOpacity>
-			);
-		};
-
-		return (
-			<Swipeable
-				ref={swipeableRef}
-				renderLeftActions={renderLeftActions}
-				onSwipeableWillOpen={handleSwipeStart}
-				onSwipeableWillClose={handleSwipeRelease}
-			>
-				<TouchableOpacity
-					activeOpacity={1}
-					onPress={handlePress}
-					style={{ backgroundColor: 'white', padding: 20 }}>
-				<Text fontFamily={'Jua-Regular'} textAlign={'center'}>
-					{item.chatName}
-				</Text>
-				</TouchableOpacity>
-			</Swipeable>
-		);
-	};
 
 	const handleCreateNewChat = async () => {
 		const newChatName = uniqueNamesGenerator({
@@ -159,13 +89,14 @@ const ChatList = ({ navigation, route }: ChatListScreenProps) => {
 		const dbRef = collection(db, 'chats');
 		const q = query(dbRef, orderBy('createdAt', 'desc'));
 		const allChatDocuments = onSnapshot(q, docsSnap => {
-			const chatArray: { chatId: string; chatName: string }[] = [];
+			const chatArray: { chatId: string; chatName: string; messages: any[] }[] = [];
 			docsSnap.forEach(doc => {
-				const chat = {
-					chatId: doc.id,
-					chatName: doc.data().name,
-				};
-				chatArray.push(chat);
+			  const chat = {
+				chatId: doc.id,
+				chatName: doc.data().name,
+				messages: doc.data().messages, // Include messages property here
+			  };
+			  chatArray.push(chat);
 			});
 			setChats(chatArray);
 		});
