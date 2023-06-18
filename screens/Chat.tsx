@@ -8,6 +8,7 @@ import { addDoc, collection, doc, updateDoc, orderBy, query, onSnapshot } from '
 
 import { StackNavigator } from '../components/Navigation/Types';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import ChatHeader from '../components/ChatHeader';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
@@ -82,38 +83,11 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	return (
 		<Box h='100%' backgroundColor='white'>
-			<Box backgroundColor={'primary.500'}>
-				<Box mt={'20px'}>
-					<Flex direction='row' justifyContent={'space-between'}>
-						<Box>
-							<TouchableOpacity
-								onPress={() => navigation.navigate('ChatList')}>
-								<Image
-									source={require('../assets/back-arrow.png')}
-									alt={'back arrow'}
-									mt='7px'
-								/>
-							</TouchableOpacity>
-						</Box>
-						<Image
-							source={require('../assets/logo.png')}
-							alt={'logo'}
-							mr={'45px'}
-						/>
-						<Text></Text>
-					</Flex>
-					<Center>
-						<Heading color={'white'} fontFamily={'Jua-Regular'}>
-							{chatName}
-						</Heading>
-						<TouchableOpacity onPress={() => setShowModal(true)}>
-							<Text color='white' fontFamily={'Jua-Regular'}>
-								Tap to change name
-							</Text>
-						</TouchableOpacity>
-					</Center>
-				</Box>
-			</Box>
+			<ChatHeader
+				navigation={navigation}
+				chatName={chatName}
+				setShowModal={setShowModal}
+			/>
 
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
 				<Modal.Content maxWidth='400px'>
