@@ -1,6 +1,6 @@
 # Chatly
 
-Connect to random users and chat!
+Join or create chatroom, anyone can use it! Chat with strangers.
 
 ## Usage
 
