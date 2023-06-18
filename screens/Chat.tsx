@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { TouchableOpacity, TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
+import { TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Box, Button, Center, Image, FormControl, Heading, Input, Modal, Text, Flex } from 'native-base';
+import { Box, Button, FormControl, Input, Modal } from 'native-base';
 
 import { auth, db } from '../firebase/firebase';
 import { addDoc, collection, doc, updateDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
