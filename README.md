@@ -7,12 +7,12 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<img width="250px" src="https://github.com/joewhocodes/readme-assets/blob/main/project_images/Chatly.gif" alt="Chatly gif" />
+<img width="250px" src="https://github.com/joewhocodes/readme-assets/blob/main/project_images/chatly.gif" alt="Chatly gif" />
 
 <h3 align="center">Chatly</h3>
 
   <p align="center">
-    A React Native Chat Application built with TypeScript, featuring with full firebase integration 
+    A React Native Chat Application built with TypeScript, featuring full Firebase integration 
   </p>
     <br />
     <a href="https://github.com/joewhocodes/Chatly"><strong>Explore the docs »</strong></a>
