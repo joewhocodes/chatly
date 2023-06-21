@@ -33,7 +33,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 			messages: [],
 		};
 
-		setChatData(currentState => [...currentState, newChat]);
+		setChatData((currentState: any) => [...currentState, newChat]);
 
 		try {
 			navigation.navigate('Chat', {
@@ -46,7 +46,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	const handleDeleteChat = (id: string) => {
-		const filteredChats = chatData.filter(chat => chat.id !== id);
+		const filteredChats = chatData.filter((chat: { id: string; }) => chat.id !== id);
 		setChatData(filteredChats);
 	};
 
@@ -103,7 +103,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 						/>
 					</Center>
 					<VStack space={5} alignItems='center'>
-						{chatData.map(chat => (
+						{chatData.map((chat: { name: string; id: string; messages: any[]; }) => (
 							<Box
 								w='90%'
 								bg='white'
