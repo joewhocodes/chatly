@@ -56,7 +56,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 	}, []);
 
-	const handleUpdateName = (oldName: string, newName: string) => {
+	const handleUpdateName = ( newName: string) => {
 		const docRef = doc(db, 'chats', route.params.chatId);
 
 		const unsubscribe = onSnapshot(docRef, docSnapshot => {
@@ -112,7 +112,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							<Button
 								onPress={() => {
 									handleUpdateName(
-										route.params.chatName,
+										// route.params.chatName,
 										chatName
 									);
 								}}>
