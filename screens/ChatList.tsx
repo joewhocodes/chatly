@@ -17,14 +17,13 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		{ chatId: string; chatName: string; messages: any[] }[]
 	>([]);
 
-	const handleCreateNewChat = async () => {
+	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
 			length: 2,
 			style: 'capital',
 			separator: ' ',
 		});
-
 		const docRef = doc(collection(db, 'chats'));
 		const newChat = {
 			name: newChatName,
