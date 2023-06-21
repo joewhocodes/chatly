@@ -31,11 +31,11 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		};
 
 		try {
+			setDoc(docRef, newChat);
 			navigation.navigate('Chat', {
 				chatId: docRef.id,
 				chatName: newChatName,
 			});
-			setDoc(docRef, newChat);
 		} catch (error) {
 			console.log('Error creating new chat:', error);
 		}
