@@ -31,7 +31,6 @@ export default function App() {
 		signInAnonymously(auth)
 			.then(getImg)
 			.then(res => {
-				console.log('user created');
 				onAuthStateChanged(auth, user => {
 					if (user) {
 						updateProfile(user, {

@@ -111,10 +111,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							</Button>
 							<Button
 								onPress={() => {
-									handleUpdateName(
-										// route.params.chatName,
-										chatName
-									);
+									handleUpdateName(chatName);
 								}}>
 								Save
 							</Button>
