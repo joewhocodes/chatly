@@ -19,7 +19,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
 
-	const thisChat = chatData.find(chat => chat.name === route.params.name);
+	const thisChat = chatData.find((chat: { name: string }) => chat.name === route.params.name);
 	
 	useLayoutEffect(() => {
 		if (thisChat) {
@@ -35,7 +35,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 
 	const onSend = useCallback(
 		(messages: IMessage[]) => {
-			const updatedChatData = chatData.map(chat => {
+			const updatedChatData = chatData.map((chat: { name: string; messages: any; id: string }) => {
 				if (chat.name === route.params.name) {
 					const updatedMessages = [
 						...chat.messages,
@@ -63,7 +63,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	);
 
 	const handleUpdateName = (oldName: string, newName: string) => {
-		let newChatData = chatData.map(chat => {
+		let newChatData = chatData.map((chat: { name: string; id: string; messages: any[] }) => {
 			if (chat.name === oldName) {
 				return {
 					...chat,
