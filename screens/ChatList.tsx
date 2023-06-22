@@ -46,7 +46,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		deleteDoc(docRef);
 	};
 
-	const handleSelectChat = (chat: { chatId: any; chatName: any }) => {
+	const handleSelectChat = (chat: { chatId: string; chatName: string }) => {
 		navigation.navigate('Chat', {
 			chatId: chat.chatId,
 			chatName: chat.chatName,
