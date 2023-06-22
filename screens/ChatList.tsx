@@ -17,6 +17,35 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		{ chatId: string; chatName: string; messages: any[] }[]
 	>([]);
 
+	useLayoutEffect(() => {
+		const dbRef = collection(db, 'chats');
+		const q = query(dbRef, orderBy('createdAt', 'desc'));
+		const allChatDocuments = onSnapshot(q, docsSnap => {
+			const chatArray: {
+				chatId: string;
+				chatName: string;
+				messages: any[];
+			}[] = [];
+			docsSnap.forEach(doc => {
+				const chat = {
+					chatId: doc.id,
+					chatName: doc.data().name,
+					messages: doc.data().messages,
+				};
+				chatArray.push(chat);
+			});
+			setChats(chatArray);
+		});
+		return allChatDocuments;
+	}, []);
+
+	const handleSelectChat = (chat: { chatId: string; chatName: string }) => {
+		navigation.navigate('Chat', {
+			chatId: chat.chatId,
+			chatName: chat.chatName,
+		});
+	};
+
 	const handleCreateNewChat = () => {
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
@@ -45,35 +74,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		const docRef = doc(db, 'chats', chatId);
 		deleteDoc(docRef);
 	};
-
-	const handleSelectChat = (chat: { chatId: string; chatName: string }) => {
-		navigation.navigate('Chat', {
-			chatId: chat.chatId,
-			chatName: chat.chatName,
-		});
-	};
-
-	useLayoutEffect(() => {
-		const dbRef = collection(db, 'chats');
-		const q = query(dbRef, orderBy('createdAt', 'desc'));
-		const allChatDocuments = onSnapshot(q, docsSnap => {
-			const chatArray: {
-				chatId: string;
-				chatName: string;
-				messages: any[];
-			}[] = [];
-			docsSnap.forEach(doc => {
-				const chat = {
-					chatId: doc.id,
-					chatName: doc.data().name,
-					messages: doc.data().messages,
-				};
-				chatArray.push(chat);
-			});
-			setChats(chatArray);
-		});
-		return allChatDocuments;
-	}, []);
 
 	return (
 		<Box h='100%' backgroundColor='secondary.500'>
