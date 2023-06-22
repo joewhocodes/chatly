@@ -20,7 +20,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	useLayoutEffect(() => {
 		const dbRef = collection(db, 'chats');
 		const q = query(dbRef, orderBy('createdAt', 'desc'));
-		const allChatDocuments = onSnapshot(q, docsSnap => {
+		onSnapshot(q, docsSnap => {
 			const chatArray: {
 				chatId: string;
 				chatName: string;
@@ -46,13 +46,13 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	const handleCreateNewChat = () => {
+		const docRef = doc(collection(db, 'chats'));
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
 			length: 2,
 			style: 'capital',
 			separator: ' ',
 		});
-		const docRef = doc(collection(db, 'chats'));
 		const newChat = {
 			name: newChatName,
 			createdAt: serverTimestamp(),
@@ -104,14 +104,12 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 							fontFamily={'Jua-Regular'}>
 							Chatrooms
 						</Heading>
-						<TouchableOpacity>
-							<Button
-								mr={'20px'}
-								backgroundColor={'teal.500'}
-								onPress={handleCreateNewChat}>
-								+
-							</Button>
-						</TouchableOpacity>
+						<Button
+							mr={'20px'}
+							backgroundColor={'teal.500'}
+							onPress={handleCreateNewChat}>
+							+
+						</Button>
 					</Flex>
 					<Center pb={'20px'}>
 						<Image
