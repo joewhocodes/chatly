@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NativeBaseProvider, extendTheme } from 'native-base';
 
 import { config } from './theme';
 import Navigation from './components/Navigation/index';
-import signIn from './components/SignIn/Index';
+import SignIn from './authentication/signIn';
 
 import { SSRProvider } from '@react-aria/ssr';
 import { useFonts } from 'expo-font';
@@ -20,7 +20,9 @@ export default function App() {
 		'Jua-Regular': require('./assets/fonts/Jua-Regular.ttf'),
 	});
 
-	signIn();
+	useEffect(() => {
+		SignIn()
+	}, []);
 
 	if (!fontsLoaded) {
 		return null;
