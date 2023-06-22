@@ -46,7 +46,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		deleteDoc(docRef);
 	};
 
-	const handleItemPress = (chat: { chatId: any; chatName: any }) => {
+	const handleSelectChat = (chat: { chatId: any; chatName: any }) => {
 		navigation.navigate('Chat', {
 			chatId: chat.chatId,
 			chatName: chat.chatName,
@@ -134,7 +134,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 										onDelete={() =>
 											handleDeleteChat(chat.chatId)
 										}
-										onPress={() => handleItemPress(chat)}
+										onPress={() => handleSelectChat(chat)}
 									/>
 								</Box>
 							))}
