@@ -36,7 +36,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 			});
 			setChats(chatArray);
 		});
-		return allChatDocuments;
 	}, []);
 
 	const handleSelectChat = (chat: { chatId: string; chatName: string }) => {
