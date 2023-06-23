@@ -1,53 +1,54 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Box, Button, FormControl, Input, Modal } from 'native-base';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
-import { auth, db } from '../firebase/firebase';
 import { addDoc, collection, doc, updateDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebase';
 
 import { StackNavigator } from '../components/Navigation/Types';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import ChatHeader from '../components/ChatHeader';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
-	const [showModal, setShowModal] = useState<boolean>(false);
-	const [chatName, setChatName] = useState<string>(route.params.chatName);
-	const [currentUser, setCurrentUser] = useState(auth.currentUser!);
+	const [showModal, setShowModal] = useState(false);
+	const [chatName, setChatName] = useState(route.params.chatName);
+	const currentUser = auth.currentUser!;
 
-	const currentUserName: string | undefined =
-		currentUser?.displayName || 'Unknown User';
-	const currentAvatar: string | undefined =
-		currentUser?.photoURL || undefined;
+	const currentUserName = currentUser?.displayName || 'Unknown User';
+	const currentAvatar = currentUser?.photoURL || undefined;
 
-	useLayoutEffect(() => {
-		const collectionRef = collection(
-			db,
-			`chats/${route.params.chatId}/messages`
+	useEffect(() => {
+		const unsubscribe = onSnapshot(
+			query(
+				collection(db, `chats/${route.params.chatId}/messages`),
+				orderBy('createdAt', 'desc')
+			),
+			querySnapshot => {
+				const fetchedMessages = querySnapshot.docs.map(doc => {
+					const data = doc.data();
+					return {
+						_id: data._id,
+						createdAt: data.createdAt.toDate(),
+						text: data.text,
+						user: data.user,
+					};
+				}) as IMessage[];
+				setMessages(fetchedMessages);
+			}
 		);
-		const q = query(collectionRef, orderBy('createdAt', 'desc'));
-
-		const unsubscribe = onSnapshot(q, querySnapshot => {
-			setMessages(
-				querySnapshot.docs.map(doc => ({
-					_id: doc.data()._id,
-					createdAt: doc.data().createdAt.toDate(),
-					text: doc.data().text,
-					user: doc.data().user,
-				}))
-			);
-		});
 		return unsubscribe;
 	}, []);
 
-	const onSend = useCallback((messages: IMessage[]) => {
+	const handleOnSend = useCallback((newMessages: IMessage[]) => {
 		setMessages(previousMessages =>
-			GiftedChat.append(previousMessages, messages)
+			GiftedChat.append(previousMessages, newMessages)
 		);
-		const { _id, createdAt, text, user } = messages[0];
+
+		const { _id, createdAt, text, user } = newMessages[0];
 		addDoc(collection(db, `chats/${route.params.chatId}/messages`), {
 			_id,
 			createdAt,
@@ -56,26 +57,18 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		});
 	}, []);
 
-	const handleUpdateName = ( newName: string) => {
-		const docRef = doc(db, 'chats', route.params.chatId);
-
-		const unsubscribe = onSnapshot(docRef, docSnapshot => {
-			if (docSnapshot.exists()) {
-				updateDoc(docRef, { name: newName })
-					.then(() => {
-						setShowModal(false);
-						navigation.setParams({ chatName: newName });
-					})
-					.catch(error => {
-						console.error(error);
-					});
-			}
-		});
-
-		return unsubscribe;
+	const handleUpdateName = async (newName: string) => {
+		const chatDocRef = doc(db, 'chats', route.params.chatId);
+		try {
+			await updateDoc(chatDocRef, { name: newName });
+			setShowModal(false);
+			navigation.setParams({ chatName: newName });
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const onChange = (
+	const handleOnChange = (
 		e: NativeSyntheticEvent<TextInputChangeEventData>
 	): void => {
 		setChatName(e.nativeEvent.text);
@@ -95,7 +88,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					<Modal.Header>Change Chat Name</Modal.Header>
 					<Modal.Body>
 						<FormControl mb='3' mt='3'>
-							<Input value={chatName} onChange={onChange} />
+							<Input value={chatName} onChange={handleOnChange} />
 						</FormControl>
 					</Modal.Body>
 					<Modal.Footer>
@@ -109,10 +102,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								}}>
 								Cancel
 							</Button>
-							<Button
-								onPress={() => {
-									handleUpdateName(chatName);
-								}}>
+							<Button onPress={() => handleUpdateName(chatName)}>
 								Save
 							</Button>
 						</Button.Group>
@@ -124,7 +114,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				messages={messages}
 				showAvatarForEveryMessage={false}
 				showUserAvatar={true}
-				onSend={messages => onSend(messages)}
+				onSend={handleOnSend}
 				messagesContainerStyle={{
 					backgroundColor: '#fff',
 				}}

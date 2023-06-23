@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc, serverTimestamp } from 'firebase/firestore';
