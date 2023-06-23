@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 
 const theme = extendTheme(config);
 type MyThemeType = typeof theme;
+
 declare module 'native-base' {
 	interface ICustomTheme extends MyThemeType {}
 }
