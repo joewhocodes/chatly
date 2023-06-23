@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -12,33 +11,38 @@ import SwipeableItem from '../components/SwipeableItem';
 
 type ChatListScreenProps = NativeStackScreenProps<StackNavigator, 'ChatList'>;
 
-const ChatList = ({ navigation }: ChatListScreenProps) => {
-	const [chats, setChats] = useState<
-		{ chatId: string; chatName: string; messages: any[] }[]
-	>([]);
+type Chat = {
+	chatId: string;
+	chatName: string;
+	messages: any[];
+};
 
-	useLayoutEffect(() => {
-		const dbRef = collection(db, 'chats');
-		const q = query(dbRef, orderBy('createdAt', 'desc'));
-		onSnapshot(q, docsSnap => {
-			const chatArray: {
-				chatId: string;
-				chatName: string;
-				messages: any[];
-			}[] = [];
-			docsSnap.forEach(doc => {
-				const chat = {
-					chatId: doc.id,
-					chatName: doc.data().name,
-					messages: doc.data().messages,
-				};
-				chatArray.push(chat);
-			});
-			setChats(chatArray);
-		});
+const ChatList = ({ navigation }: ChatListScreenProps) => {
+	const [chats, setChats] = useState<Chat[]>([]);
+
+	useEffect(() => {
+		const unsubscribe = onSnapshot(
+			query(collection(db, 'chats'), orderBy('createdAt', 'desc')),
+			docsSnap => {
+				const chatArray: Chat[] = [];
+				docsSnap.forEach(doc => {
+					const chat: Chat = {
+						chatId: doc.id,
+						chatName: doc.data().name,
+						messages: doc.data().messages,
+					};
+					chatArray.push(chat);
+				});
+				setChats(chatArray);
+			}
+		);
+
+		return () => {
+			unsubscribe();
+		};
 	}, []);
 
-	const handleSelectChat = (chat: { chatId: string; chatName: string }) => {
+	const handleSelectChat = (chat: Chat) => {
 		navigation.navigate('Chat', {
 			chatId: chat.chatId,
 			chatName: chat.chatName,
@@ -46,7 +50,6 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	const handleCreateNewChat = () => {
-		const docRef = doc(collection(db, 'chats'));
 		const newChatName = uniqueNamesGenerator({
 			dictionaries: [adjectives, animals],
 			length: 2,
@@ -59,6 +62,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 		};
 
 		try {
+			const docRef = doc(collection(db, 'chats'));
 			setDoc(docRef, newChat);
 			navigation.navigate('Chat', {
 				chatId: docRef.id,

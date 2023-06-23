@@ -6,7 +6,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { SwipeableItemProps } from './types';
 
 const SwipeableItem = ({ item, onDelete, onPress }: SwipeableItemProps) => {
-	const swipeableRef = useRef<Swipeable>(null);
+	// const swipeableRef = useRef<Swipeable>(null);
 	const [isSwiping, setIsSwiping] = useState(false);
 
 	const handleSwipeStart = () => {
@@ -56,7 +56,7 @@ const SwipeableItem = ({ item, onDelete, onPress }: SwipeableItemProps) => {
 
 	return (
 		<Swipeable
-			ref={swipeableRef}
+			// ref={swipeableRef}
 			renderLeftActions={renderLeftActions}
 			onSwipeableWillOpen={handleSwipeStart}
 			onSwipeableWillClose={handleSwipeRelease}>
