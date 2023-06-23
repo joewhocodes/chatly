@@ -78,7 +78,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		<Box h='100%' backgroundColor='white'>
 			<ChatHeader
 				navigation={navigation}
-				chatName={chatName}
+				chatName={route.params.chatName}
 				setShowModal={setShowModal}
 			/>
 
