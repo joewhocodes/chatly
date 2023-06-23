@@ -1,4 +1,4 @@
-import { updateProfile, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { updateProfile, signInAnonymously } from "firebase/auth";
 import { auth } from '../firebase/firebase';
 import { uniqueNamesGenerator, adjectives, animals } from "unique-names-generator";
 
