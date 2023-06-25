@@ -13,3 +13,17 @@ exports[`ChatHeader renders ChatHeader correctly 1`] = `
   }
 />
 `;
+
+exports[`ChatHeader renders ChatHeader correctly 2`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
