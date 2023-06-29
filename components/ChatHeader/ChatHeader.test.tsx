@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { NativeBaseProvider } from 'native-base';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import ChatHeader from './index';
 
 describe('ChatHeader', () => {
