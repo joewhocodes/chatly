@@ -62,7 +62,7 @@ const SwipeableItem = ({ item, onDelete, onPress }: SwipeableItemProps) => {
 				activeOpacity={1}
 				onPress={handlePress}
 				style={{ backgroundColor: 'white', padding: 20 }}>
-				<Text fontFamily={'Jua-Regular'} textAlign={'center'}>
+				<Text fontWeight={'bold'} textAlign={'center'}>
 					{item.chatName}
 				</Text>
 			</TouchableOpacity>

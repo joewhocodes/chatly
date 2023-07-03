@@ -79,19 +79,15 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	return (
-		<Box h='100%' backgroundColor='secondary.500'>
-			<Box backgroundColor={'primary.500'} pb={'22px'}>
+		<Box h='100%' backgroundColor='white'>
+			<Box backgroundColor={'#5b3afe'} pb={'22px'}>
 				<Center mt={'20px'}>
 					<Image
 						source={require('../assets/logo.png')}
 						alt={'logo'}
 					/>
 				</Center>
-				<Heading
-					color={'white'}
-					textAlign={'center'}
-					mt={'5px'}
-					fontFamily={'Jua-Regular'}>
+				<Heading color={'white'} textAlign={'center'} mt={'5px'}>
 					Welcome to Chatly!
 				</Heading>
 			</Box>
@@ -101,26 +97,19 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 						direction={'row'}
 						justifyContent={'space-between'}
 						mt={'15px'}
-						mb={'15px'}>
-						<Heading
-							color={'white'}
-							ml={'30px'}
-							fontFamily={'Jua-Regular'}>
+						mb={'25px'}
+					>
+						<Heading color={'black'} ml={'30px'}>
 							Chatrooms
 						</Heading>
 						<Button
 							mr={'20px'}
-							backgroundColor={'teal.500'}
-							onPress={handleCreateNewChat}>
+							backgroundColor={'#5b3afe'}
+							onPress={handleCreateNewChat}
+						>
 							+
 						</Button>
 					</Flex>
-					<Center pb={'20px'}>
-						<Image
-							source={require('../assets/dots-white.png')}
-							alt={'dots'}
-						/>
-					</Center>
 					<VStack space={5} alignItems='center'>
 						{!!chats.length &&
 							chats.map(chat => (
@@ -129,7 +118,8 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 									bg='white'
 									rounded='md'
 									shadow={7}
-									key={chat.chatId}>
+									key={chat.chatId}
+								>
 									<SwipeableItem
 										item={chat}
 										onDelete={() =>
