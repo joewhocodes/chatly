@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Box, Button, FormControl, Input, Modal } from 'native-base';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Box, Button, FormControl, Input, Modal, Pressable } from 'native-base';
+import { Bubble, GiftedChat, IMessage, InputToolbar, InputToolbarProps } from 'react-native-gifted-chat';
 
 import { addDoc, collection, doc, updateDoc, orderBy, query, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebase';
@@ -77,65 +77,105 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		setChatName(e.nativeEvent.text);
 	};
 
+	const customChatBubble = (props: any) => {
+		return (
+			<Bubble
+				{...props}
+				wrapperStyle={{
+					left: {
+						paddingBottom: 2,
+						paddingTop: 2,
+					},
+					right: {
+						paddingBottom: 2,
+						paddingTop: 2,
+						backgroundColor: '#5b3afe',
+					},
+				}}
+			/>
+		);
+	};
+
+	const customtInputToolbar = (props: InputToolbarProps<IMessage>) => {
+		return (
+			<InputToolbar
+				{...props}
+				containerStyle={{
+					backgroundColor: '#ececec',
+					marginLeft: 20,
+					marginRight: 20,
+					borderRadius: 20,
+					borderTopColor: '#E8E8E8',
+					paddingTop: 3,
+					paddingBottom: 2,
+					paddingLeft: 8,
+				}}
+			/>
+		);
+	};
+
 	return (
-		<Box h='100%' backgroundColor='white'>
-			<ChatHeader
-				navigation={navigation}
-				chatName={route.params.chatName}
-				setShowModal={setShowModal}
-				setShowBlock={setShowBlock}
-			/>
-
-			<SlideComponent 
-				navigation={navigation}
-				showBlock={showBlock}
-				setShowBlock={setShowBlock} 
-				id={route.params.chatId}
-			/>
-
-			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-				<Modal.Content maxWidth='400px'>
-					<Modal.CloseButton />
-					<Modal.Header>Change Chat Name</Modal.Header>
-					<Modal.Body>
-						<FormControl mb='3' mt='3'>
-							<Input value={chatName} onChange={handleOnChange} />
-						</FormControl>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button.Group space={2}>
-							<Button
-								variant='ghost'
-								colorScheme='blueGray'
-								onPress={() => {
-									setChatName(route.params.chatName);
-									setShowModal(false);
-								}}
-							>
-								Cancel
-							</Button>
-							<Button onPress={() => handleUpdateName(chatName)}>
-								Save
-							</Button>
-						</Button.Group>
-					</Modal.Footer>
-				</Modal.Content>
-			</Modal>
-
-			<GiftedChat
-				messages={messages}
-				showAvatarForEveryMessage={false}
-				showUserAvatar={true}
-				onSend={handleOnSend}
-				messagesContainerStyle={{
-					backgroundColor: '#fff',
-				}}
-				user={{
-					_id: currentUserName,
-					avatar: currentAvatar,
-				}}
-			/>
-		</Box>
+		<Pressable onPressIn={() => setShowBlock(false)}>
+			<Box h='100%' backgroundColor='white'>
+				<ChatHeader
+					navigation={navigation}
+					chatName={route.params.chatName}
+					setShowModal={setShowModal}
+					setShowBlock={setShowBlock}
+				/>
+				<SlideComponent
+					navigation={navigation}
+					showBlock={showBlock}
+					setShowBlock={setShowBlock}
+					id={route.params.chatId}
+				/>
+				<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+					<Modal.Content maxWidth='400px'>
+						<Modal.CloseButton />
+						<Modal.Header>Change Chat Name</Modal.Header>
+						<Modal.Body>
+							<FormControl mb='3' mt='3'>
+								<Input value={chatName} onChange={handleOnChange} />
+							</FormControl>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button.Group space={2}>
+								<Button
+									variant='ghost'
+									colorScheme='blueGray'
+									onPress={() => {
+										setChatName(route.params.chatName);
+										setShowModal(false);
+									}}
+								>
+									Cancel
+								</Button>
+								<Button backgroundColor={'#5b3afe'} onPress={() => handleUpdateName(chatName)}>
+									Save
+								</Button>
+							</Button.Group>
+						</Modal.Footer>
+					</Modal.Content>
+				</Modal>
+				<GiftedChat
+					messages={messages}
+					showAvatarForEveryMessage={false}
+					placeholder='Message...'
+					showUserAvatar={false}
+					onSend={handleOnSend}
+					renderBubble={customChatBubble}
+					renderInputToolbar={props => customtInputToolbar(props)}
+					renderTime={() => null}
+					messagesContainerStyle={{
+						backgroundColor: '#fff',
+					}}
+					user={{
+						_id: currentUserName,
+						avatar: currentAvatar,
+					}}
+				/>
+			</Box>
+		</Pressable>
 	);
 };
 
