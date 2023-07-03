@@ -71,8 +71,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 					
 					textAlign={'center'}
 					mt={'5px'}
-					// fontFamily={''}
-					>
+				>
 					Welcome to Chatly!
 				</Heading>
 			</Box>
@@ -87,8 +86,7 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 						<Heading
 							color={'black'}
 							ml={'30px'}
-							// fontFamily={'Jua-Regular'}
-							>
+						>
 							Chatrooms
 						</Heading>
 						<TouchableOpacity>

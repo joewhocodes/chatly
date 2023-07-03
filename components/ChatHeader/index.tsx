@@ -12,6 +12,7 @@ const ChatHeader = ({
 	setShowBlock,
 }: ChatHeaderProps) => {
 	const handleBackPress = () => {
+		setShowBlock(false);
 		navigation.navigate('ChatList');
 	};
 
