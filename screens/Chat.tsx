@@ -1,26 +1,26 @@
 import React, { useState, useLayoutEffect, useCallback } from 'react';
-import { TextInputChangeEventData, NativeSyntheticEvent } from 'react-native';
-import { Box, Button, FormControl, Input, Modal } from 'native-base';
+import { TextInputChangeEventData, NativeSyntheticEvent, Alert } from 'react-native';
+import { Box, Button, FormControl, Input, Modal, Text } from 'native-base';
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
 import { StackNavigator } from '../components/Navigation/types';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, IMessage, InputToolbar, InputToolbarProps } from 'react-native-gifted-chat';
 
 import { chatsState } from '../atoms/atoms';
 import { useRecoilState } from 'recoil';
 import ChatHeader from '../components/ChatHeader';
 
-
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showBlock, setShowBlock] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
+	const [blockCheck, setBlockCheck] = useState<boolean>(false);
 
 	const thisChat = chatData.find((chat: { name: string }) => chat.name === route.params.name);
-	
 	useLayoutEffect(() => {
 		if (thisChat) {
 			const messages: IMessage[] = thisChat.messages.map(doc => ({
@@ -45,7 +45,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 							text: message.text,
 							user: {
 								id_: message.user._id.toString(),
-								avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
+								avatar: '',
 							},
 						})),
 					];
@@ -80,13 +80,74 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 		setChatName(e.nativeEvent.text);
 	};
 
+	const cancelBlock = () => {
+		setShowBlock(false);
+		setTimeout(() => {
+			setBlockCheck(false);
+		}, 200);
+	};
+
+	const handleBlockUser = () => {
+		setShowBlock(false);
+		handleDeleteChat(thisChat.id);
+		navigation.navigate('ChatList');
+		Alert.alert('User has been blocked, thanks for reporting!');
+	};
+		
+	const handleDeleteChat = (id: string) => {
+		const filteredChats = chatData.filter((chat: { id: string; }) => chat.id !== id);
+		setChatData(filteredChats);
+	};
+		
+	const renderBubble = (props: any) => {
+		return (
+			<Bubble
+				{...props}
+				textStyle={{
+					right: {
+					},
+				}}
+				wrapperStyle={{
+					left: {
+						paddingBottom: 2,
+						paddingTop: 2,
+					},
+					right: {
+						paddingBottom: 2,
+						paddingTop: 2,
+						backgroundColor: '#5b3afe',
+					},
+				}}
+			/>
+		);
+	};
+
+	const customtInputToolbar = (props: InputToolbarProps<IMessage>) => {
+		return (
+		  <InputToolbar
+			{...props}
+			containerStyle={{
+			  backgroundColor: "#ececec",
+			  marginLeft: 20,
+			  marginRight: 20,
+			  borderRadius: 20,
+			  borderTopColor: "#E8E8E8",
+			  paddingTop: 3,
+			  paddingBottom: 2,
+			  paddingLeft: 10,
+			}}
+		  />
+		);
+	  };
+
 	return (
 		<Box h='100%' backgroundColor='white'>
-		 <ChatHeader
-			navigation={navigation}
-			chatName={chatName}
-			setShowModal={setShowModal}
-      	/>
+			<ChatHeader
+				navigation={navigation}
+				chatName={chatName}
+				setShowModal={setShowModal}
+				setShowBlock={setShowBlock}
+			/>
 
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
 				<Modal.Content maxWidth='400px'>
@@ -105,16 +166,20 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								onPress={() => {
 									setChatName(chatName);
 									setShowModal(false);
-								}}>
+								}}
+								
+							>
 								Cancel
 							</Button>
 							<Button
+								backgroundColor={'#5b3afe'}
 								onPress={() => {
 									handleUpdateName(
 										route.params.name,
 										chatName
 									);
-								}}>
+								}}
+							>
 								Save
 							</Button>
 						</Button.Group>
@@ -122,17 +187,89 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				</Modal.Content>
 			</Modal>
 
+			<Modal isOpen={showBlock} onClose={() => setShowBlock(false)}>
+				<Modal.Content
+					maxWidth='600px'
+					backgroundColor={'#5b3afe'}
+					// paddingTop={blockCheck ? 0 : 10}
+					// paddingBottom={10}
+					marginTop={'auto'}
+					borderRadius={20}
+				>
+					{!blockCheck ? (
+						<>
+						<Modal.CloseButton />
+							<Button
+								onPress={() => setBlockCheck(true)}
+								mt={12}
+								ml={8}
+								mr={8}
+								mb={4}
+								borderRadius={15}
+								backgroundColor={'white'}
+								color='black'
+							>
+								<Text fontWeight='bold'>Report Contact</Text>
+							</Button>
+							<Button
+								ml={8}
+								mr={8}
+								mb={12}
+								borderRadius={15}
+								backgroundColor={'white'}
+								color='black'
+							>
+								<Text fontWeight='bold'>Block Contact</Text>
+							</Button>
+						</>
+					) : (
+						<>
+							<Text ml={8} mr={8} pt={7} pb={4} fontWeight='medium' textAlign='center' color='white' fontSize={18}>
+								Are you sure you want to block this user?
+							</Text>
+							<Button
+								onPress={() => handleBlockUser()}
+								ml={8}
+								mr={8}
+								mb={1}
+								borderRadius={15}
+								backgroundColor={'white'}
+								color='black'
+							>
+								<Text fontWeight='bold'>Block User</Text>
+							</Button>
+							<Button
+								onPress={() => cancelBlock()}
+								ml={8}
+								mr={8}
+								mb={2}
+								borderRadius={15}
+								backgroundColor={'#5b3afe'}
+							>
+								<Text fontWeight='bold' color='white'>
+									Cancel
+								</Text>
+							</Button>
+						</>
+					)}
+				</Modal.Content>
+			</Modal>
+
 			<GiftedChat
 				messages={messages}
 				showAvatarForEveryMessage={false}
-				showUserAvatar={true}
+				placeholder='Message...'
+				showUserAvatar={false}
 				onSend={messages => onSend(messages)}
+				renderBubble={renderBubble}
+				renderInputToolbar={props => customtInputToolbar(props)}
+				renderTime={() => null}
 				messagesContainerStyle={{
 					backgroundColor: '#fff',
 				}}
 				user={{
 					_id: 'cat_lord',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
+					avatar: '',
 				}}
 			/>
 		</Box>

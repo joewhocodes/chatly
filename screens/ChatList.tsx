@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView } from 'native-base';
+import { VStack, Center, Heading, Button, Flex, Box, Image, ScrollView, Divider } from 'native-base';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { useRecoilState } from 'recoil';
 import { chatsState } from '../atoms/atoms';
@@ -58,8 +58,8 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 	};
 
 	return (
-		<Box h='100%' backgroundColor='secondary.500'>
-			<Box backgroundColor={'primary.500'} pb={'22px'}>
+		<Box h='100%' backgroundColor='white'>
+			<Box backgroundColor={'#5b3afe'} pb={'22px'}>
 				<Center mt={'20px'}>
 					<Image
 						source={require('../assets/logo.png')}
@@ -68,12 +68,15 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 				</Center>
 				<Heading
 					color={'white'}
+					
 					textAlign={'center'}
 					mt={'5px'}
-					fontFamily={'Jua-Regular'}>
+					// fontFamily={''}
+					>
 					Welcome to Chatly!
 				</Heading>
 			</Box>
+			<Divider />
 			<ScrollView>
 				<Box mb={'20px'}>
 					<Flex
@@ -82,15 +85,16 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 						mt={'15px'}
 						mb={'15px'}>
 						<Heading
-							color={'white'}
+							color={'black'}
 							ml={'30px'}
-							fontFamily={'Jua-Regular'}>
+							// fontFamily={'Jua-Regular'}
+							>
 							Chatrooms
 						</Heading>
 						<TouchableOpacity>
 							<Button
 								mr={'20px'}
-								backgroundColor={'teal.500'}
+								backgroundColor={'#5b3afe'}
 								onPress={handleCreateNewChat}>
 								+
 							</Button>
@@ -107,7 +111,8 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 							<Box
 								w='90%'
 								bg='white'
-								rounded='md'
+								rounded='xl'
+								borderRadius={20}
 								shadow={7}
 								key={chat.name}>
 								<SwipeableItem

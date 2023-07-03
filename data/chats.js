@@ -8,8 +8,8 @@ const chats = [
 				createdAt: '2022-03-25 21:16:00',
 				text: 'Hey',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -17,8 +17,8 @@ const chats = [
 				createdAt: '2022-03-25 21:16:00',
 				text: 'First time here!',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -26,8 +26,8 @@ const chats = [
 				createdAt: '2022-03-25 21:16:00',
 				text: 'How are you?',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -62,8 +62,8 @@ const chats = [
 				createdAt: '2022-03-25 21:16:00',
 				text: 'Cool',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -71,8 +71,8 @@ const chats = [
 				createdAt: '2022-03-25 21:16:00',
 				text: 'What are you doing today?',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -107,8 +107,8 @@ const chats = [
 				createdAt: '2022-03-25 21:19:00',
 				text: 'Cleaning out my garage and got distracted lol',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
@@ -116,8 +116,8 @@ const chats = [
 				createdAt: '2022-03-25 21:19:00',
 				text: 'Ever used this app before?',
 				user: {
-					id_: 'principle_egret',
-					avatar: 'https://loremflickr.com/cache/resized/65535_52819612937_0111cf7060_z_320_240_g.jpg',
+					id_: 'sleepy_goat',
+					avatar: 'https://loremflickr.com/cache/resized/65535_52422330809_c86d4f09f3_320_240_nofilter.jpg',
 				},
 			},
 			{
