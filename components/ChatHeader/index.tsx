@@ -50,7 +50,7 @@ const ChatHeader = ({ navigation, chatName, setShowModal, setShowBlock }: ChatHe
 					</TouchableOpacity>
 				</Flex>
 				<TouchableOpacity onPress={handleBlockUser}>
-				  <Ionicons name="menu" size={24} marginRight={10} color="black" />
+				  	<Ionicons name="menu" size={24} marginRight={10} color="black" />
 				</TouchableOpacity>
 			  </Flex>
 		  </Box>

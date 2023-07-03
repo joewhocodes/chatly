@@ -9,6 +9,7 @@ import { auth, db } from '../firebase/firebase';
 
 import { StackNavigator } from '../components/Navigation/Types';
 import ChatHeader from '../components/ChatHeader';
+import SlideComponent from '../components/SlideComponent/Index';
 
 type ChatScreenProps = NativeStackScreenProps<StackNavigator, 'Chat'>;
 
@@ -85,6 +86,13 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				setShowBlock={setShowBlock}
 			/>
 
+			<SlideComponent 
+				navigation={navigation}
+				showBlock={showBlock}
+				setShowBlock={setShowBlock} 
+				id={route.params.chatId}
+			/>
+
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
 				<Modal.Content maxWidth='400px'>
 					<Modal.CloseButton />
@@ -102,7 +110,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 								onPress={() => {
 									setChatName(route.params.chatName);
 									setShowModal(false);
-								}}>
+								}}
+							>
 								Cancel
 							</Button>
 							<Button onPress={() => handleUpdateName(chatName)}>
