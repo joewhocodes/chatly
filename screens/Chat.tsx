@@ -16,6 +16,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const [showModal, setShowModal] = useState(false);
 	const [chatName, setChatName] = useState(route.params.chatName);
+	const [showBlock, setShowBlock] = useState<boolean>(false);
+	const [blockCheck, setBlockCheck] = useState<boolean>(false);
 	const currentUser = auth.currentUser!;
 
 	const currentUserName = currentUser?.displayName || 'Unknown User';
@@ -80,6 +82,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 				navigation={navigation}
 				chatName={route.params.chatName}
 				setShowModal={setShowModal}
+				setShowBlock={setShowBlock}
 			/>
 
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>

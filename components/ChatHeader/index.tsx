@@ -1,45 +1,62 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, Center, Heading, Text, Flex, Image } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
+import { Box, Center, Heading, Text, Flex, Divider } from 'native-base';
+import { Ionicons } from '@expo/vector-icons'; 
 
 import { ChatHeaderProps } from './types';
 
-const ChatHeader = ({ navigation, chatName, setShowModal }: ChatHeaderProps) => {
-	const handleBackPress = () => navigation.navigate('ChatList');
-	const handleChangeName = () => setShowModal(true);
+const ChatHeader = ({ navigation, chatName, setShowModal, setShowBlock }: ChatHeaderProps) => {
+	
+	const handleBackPress = () => {
+		setShowBlock(false);
+		navigation.navigate('ChatList');
+	};
+
+	const handleChangeName = () => {
+		setShowModal(true);
+	};
+
+	const handleBlockUser = () => {
+		setShowBlock(true);
+	};
 
 	return (
-		<Box backgroundColor='primary.500'>
-			<Flex direction='row' justifyContent='space-between'>
-				<Box>
+		<Box backgroundColor={'white'}>
+		  <Box>
+			  <Flex direction='row' mt={9} mb={3} justifyContent='space-between'>
+				<Flex direction='row' justifyContent='space-between'>
 					<TouchableOpacity onPress={handleBackPress}>
-						<Image
-							source={require('../../assets/back-arrow.png')}
-							alt='back arrow'
-							mt={7}
-						/>
+					  <Box ml={2}>
+						<AntDesign name='left' size={24} color='black' />
+					  </Box>
 					</TouchableOpacity>
-				</Box>
-				<Image
-					source={require('../../assets/logo.png')}
-					alt='logo'
-					mr={45}
-					mt={7}
-				/>
-				<Text></Text>
-			</Flex>
-			<Center>
-				<Heading color='white' fontFamily='Jua-Regular'>
-					{chatName}
-				</Heading>
-				<TouchableOpacity onPress={handleChangeName}>
-					<Text color='white' fontFamily='Jua-Regular'>
-						Tap to change name
-					</Text>
+					{/* <Image
+						source={require('../../assets/logo.png')}
+						alt={'logo'}
+						mr={'45px'}
+					  /> */}
+					<TouchableOpacity onPress={handleChangeName}>
+					  <Heading
+						color={'black'}
+						fontSize={16}
+						mt={'1.8px'}
+						// fontFamily={'Roboto'}
+						fontWeight={'bold'}
+						ml={1}
+					  >
+						{chatName}
+					  </Heading>
+					</TouchableOpacity>
+				</Flex>
+				<TouchableOpacity onPress={handleBlockUser}>
+				  <Ionicons name="menu" size={24} marginRight={10} color="black" />
 				</TouchableOpacity>
-			</Center>
+			  </Flex>
+		  </Box>
+		  <Divider />
 		</Box>
-	);
+	  );
 };
 
 export default ChatHeader;
