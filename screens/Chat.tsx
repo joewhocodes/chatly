@@ -166,6 +166,7 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 					renderBubble={customChatBubble}
 					renderInputToolbar={props => customtInputToolbar(props)}
 					renderTime={() => null}
+					bottomOffset={2}
 					messagesContainerStyle={{
 						backgroundColor: '#fff',
 					}}

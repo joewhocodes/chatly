@@ -116,9 +116,8 @@ const ChatList = ({ navigation }: ChatListScreenProps) => {
 								<Box
 									w='90%'
 									bg='white'
-									// rounded='xl'
-									shadow={7}
 									borderRadius={20}
+									shadow={7}
 									key={chat.chatId}
 								>
 									<SwipeableItem
