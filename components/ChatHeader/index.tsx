@@ -27,7 +27,6 @@ const ChatHeader = ({
 	return (
 		<Box backgroundColor={'white'}>
 		  <Box>
-			<Flex direction='column' justifyContent='space-between'>
 			  <Flex direction='row' mt={9} mb={3} justifyContent='space-between'>
 				<Flex direction='row' justifyContent='space-between'>
 					<TouchableOpacity onPress={handleBackPress}>
@@ -57,7 +56,6 @@ const ChatHeader = ({
 				  <Ionicons name="menu" size={24} marginRight={10} color="black" />
 				</TouchableOpacity>
 			  </Flex>
-			</Flex>
 		  </Box>
 		  <Divider />
 		</Box>

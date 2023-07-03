@@ -162,7 +162,8 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						marginBottom={0}
 						marginTop={'auto'}
 						backgroundColor={'#5b3afe'}
-						borderRadius={1}
+						borderTopRadius={25}
+						borderBottomRadius={0}
 					>
 						<Button
 							onPress={() => setBlockCheck(true)}
