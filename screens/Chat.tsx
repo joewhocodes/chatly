@@ -11,6 +11,8 @@ import { Bubble, GiftedChat, IMessage, InputToolbar, InputToolbarProps } from 'r
 import { chatsState } from '../atoms/atoms';
 import { useRecoilState } from 'recoil';
 import ChatHeader from '../components/ChatHeader';
+import { Entypo } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [chatData, setChatData] = useRecoilState(chatsState);
@@ -165,9 +167,24 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						borderTopRadius={25}
 						borderBottomRadius={0}
 					>
+						<TouchableOpacity onPress={() => setShowBlock(false)}>
+							<Text
+								textAlign='right'
+								color='lightgrey'
+								fontSize={18}
+								marginRight={5}
+							>
+								<Entypo
+									name='cross'
+									size={24}
+									color='lightgrey'
+								/>
+							</Text>
+						</TouchableOpacity>
+
 						<Button
 							onPress={() => setBlockCheck(true)}
-							mt={12}
+							mt={8}
 							ml={8}
 							mr={8}
 							mb={4}
@@ -194,12 +211,27 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 						marginBottom={0}
 						marginTop={'auto'}
 						backgroundColor={'#5b3afe'}
-						borderRadius={1}
+						borderTopRadius={25}
+						borderBottomRadius={0}
 					>
+						<TouchableOpacity onPress={() => setShowBlock(false)}>
+							<Text
+								textAlign='right'
+								color='lightgrey'
+								fontSize={18}
+								marginRight={5}
+							>
+								<Entypo
+									name='cross'
+									size={24}
+									color='lightgrey'
+								/>
+							</Text>
+						</TouchableOpacity>
 						<Text
 							ml={8}
 							mr={8}
-							pt={7}
+							pt={'14px'}
 							pb={4}
 							fontWeight='medium'
 							textAlign='center'
