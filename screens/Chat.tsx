@@ -19,13 +19,9 @@ const Chat = ({ navigation, route }: ChatScreenProps) => {
 	const [showBlock, setShowBlock] = useState<boolean>(false);
 	const [chatName, setChatName] = useState<string>(route.params.name);
 	const [blockCheck, setBlockCheck] = useState<boolean>(false);
-	const [isOpenTop, setIsOpenTop] = useState(false);
 
-	const str = `${isOpenTop ? "Hide" : "Check Internet Connection"}`;
-
-	const thisChat = chatData.find(
-		(chat: { name: string }) => chat.name === route.params.name
-	);
+	const thisChat = chatData.find((chat: { name: string }) => chat.name === route.params.name);
+	
 	useLayoutEffect(() => {
 		if (thisChat) {
 			const messages: IMessage[] = thisChat.messages.map(doc => ({
